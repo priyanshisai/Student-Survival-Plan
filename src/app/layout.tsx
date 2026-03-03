@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/components/providers/SessionProvider";
+import type { Viewport } from 'next'
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1, // Example: Disables user scaling
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+
+    <html lang="en" className="bg-black ">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

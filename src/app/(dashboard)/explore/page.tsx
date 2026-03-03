@@ -23,12 +23,12 @@ interface BlogPost {
 
 // Mock data
 const locations: Location[] = [
-  { id: "1", name: "Central Library", type: "study", rating: 4.5, reviews: 120, description: "Best place for focused study", explored: true },
+  { id: "1", name: "Learning Resource Centre", type: "study", rating: 4.5, reviews: 120, description: "Best place for focused study", explored: true },
   { id: "2", name: "Nescafe Corner", type: "food", rating: 4.2, reviews: 89, description: "Great coffee and snacks", explored: true },
   { id: "3", name: "Sports Complex", type: "sports", rating: 4.8, reviews: 156, description: "Modern gym and sports facilities", explored: false },
-  { id: "4", name: "Computer Lab 2", type: "lab", rating: 4.0, reviews: 45, description: "24/7 access for projects", explored: true },
-  { id: "5", name: "Amphitheatre", type: "venue", rating: 4.6, reviews: 78, description: "Perfect for events and shows", explored: false },
-  { id: "6", name: "Innovation Hub", type: "lab", rating: 4.7, reviews: 34, description: "Startup incubation center", explored: false },
+  { id: "4", name: "Cafeteria", type: "food", rating: 4.0, reviews: 45, description: " XYZ", explored: true },
+  { id: "5", name: "Open Air Theatre", type: "venue", rating: 4.6, reviews: 78, description: "Perfect for events and shows", explored: false },
+  { id: "6", name: "Stationary", type: "store", rating: 4.7, reviews: 34, description: "Only place to get statinoary stuff without instamart or blinkit", explored: false },
 ];
 
 const blogPosts: BlogPost[] = [

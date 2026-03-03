@@ -1,12 +1,17 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+// In Prisma 7, pass the URL directly to the adapter options
+const adapter = new PrismaBetterSqlite3({
+    url: "file:./dev.db"
+});
 
 export const prisma =
     globalForPrisma.prisma ||
     new PrismaClient({
-        // In Prisma 7, ensure your environment variables are loaded
-        // if you are using Accelerate or specific drivers.
+        adapter,
     });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

@@ -2,6 +2,7 @@ import { defineConfig } from '@prisma/config';
 
 export default defineConfig({
     datasource: {
-        url: 'file:./dev.db', // This tells Prisma where to create the file
+        // This must point to the dev.db file seen in your git status
+        url: 'file:./dev.db',
     },
 });

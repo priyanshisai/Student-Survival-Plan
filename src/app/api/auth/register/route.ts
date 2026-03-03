@@ -2,7 +2,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-// CHANGE THIS: Import from auth-helpers instead of auth
+
+
 import { hashPassword, isValidCollegeEmail } from "@/lib/auth-helpers";
 
 export async function POST(req: NextRequest) {
