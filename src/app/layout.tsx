@@ -7,7 +7,7 @@ import type { Viewport } from 'next'
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1, // Example: Disables user scaling
+    maximumScale: 1,
 }
 
 const geistSans = Geist({

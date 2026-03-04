@@ -6,6 +6,7 @@ import {createMoodCheckIn, getTodaysMood} from "@/lib/actions/mood";
 import {getTodayLeaderboard, getUserStats} from "@/lib/actions/leaderboard";
 import {getTodoStats} from "@/lib/actions/todos";
 import {PackageOpen, CircleQuestionMark, UserStar, BugPlay,} from "lucide-react";
+import {redirect} from "next/navigation";
 
 const moods = [
     {emoji: "😊", label: "Great"},
@@ -56,6 +57,7 @@ interface LeaderboardUser {
 
 export default function HomePage() {
     const {data: session} = useSession();
+
     const [selectedMood, setSelectedMood] = useState<string | null>(null);
     const [moodNote, setMoodNote] = useState("");
     const [showMoodSuccess, setShowMoodSuccess] = useState(false);
@@ -116,6 +118,11 @@ export default function HomePage() {
         if (hour < 17) return "Good Afternoon";
         return "Good Evening";
     };
+
+
+    if (status === "loading"){
+        return <div>Loading...</div>;
+    }
 
     return (
 
