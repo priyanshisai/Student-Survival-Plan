@@ -2,8 +2,11 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+{/*   :is()  is a selector function   */}
 
 :root {
+{/*   uses 3 different ways of writing color: Hex, HSL, OKLCH  */}
+{/*   these are custom property (variable)  */}
     --background: #ffffff;
     --foreground: 222.2 84% 4.9%;
     --color-blue: #94eaff;
@@ -25,7 +28,7 @@
     --muted-foreground: oklch(0.556 0 0);
     --accent: oklch(0.97 0 0);
     --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
+    --destructive: oklch(0.577 0.245 27.325);   {/* delete buttons or error messages */}
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
@@ -44,6 +47,7 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
+{/*   . is for CSS class   */}
 .dark {
     --background: #020617;
     --foreground: 210 40% 98%;
@@ -61,6 +65,7 @@ html, body {
     height: 100%;
 }
 
+{/*  mapping raw CSS data from :root to a tailwind utility  */}
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -107,6 +112,7 @@ html, body {
     --radius-xl: calc(var(--radius) + 4px);
 }
 
+{/*   shortcut  */}
 @utility flex-center {
     @apply flex items-center justify-center;
 }
@@ -121,9 +127,10 @@ html, body {
 
 @utility card-shadow {
     box-shadow: 0px 4px 40px 0px #00000066;
-
     }
 
+
+{/*   defines colors,fonts and sizes  */}
 @layer base {
     * {
         @apply border-border outline-ring/50;
@@ -151,6 +158,7 @@ html, body {
 }
 
 @layer components {
+{/*   # is for CSS id   */}
     #home {
         .subheading {
             @apply text-light-100 text-lg max-sm:text-sm text-center mt-5;
@@ -160,7 +168,7 @@ html, body {
     #explore-btn {
         @apply border-dark-200 bg-dark-100 flex w-fit cursor-pointer  rounded-full border px-8 py-3.5 max-sm:w-full text-center;
 
-        a {
+        a { /* a is anchor/link  */
             @apply flex-center gap-2 text-center w-full;
         }
     }
