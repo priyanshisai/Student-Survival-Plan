@@ -63,7 +63,7 @@ export default function LoginPage() {
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md border border-white/20">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-white mb-2">
-                        Welcome Back! 👋
+                        Welcome Back!
                     </h1>
                     <p className="text-white/70">Sign in to your Student Survival Plan</p>
                 </div>
@@ -122,21 +122,17 @@ export default function LoginPage() {
                 </form>
 
                 {/*  Forgot Password Section */}
-                <div className={`flex flex-col gap-2`}>
-                    <div className="flex justify-between items-center">
-                        <label className={`text-sm text-light-100`}>Password</label>
+                <div className={`flex flex-row gap-2`}>
+                    <div className="flex h-10  w-1/2 "></div>
+                    <div className="flex flex-row w-1/12 max"></div>
+                    <div className="flex  items-center py-5 left-2">
                         <Link
                         href="/forgot-password"
-                        className={`text-primary text-xs hover:underline`}>
+                        className={`text-white/60 text-sm hover:underline`}>
                             Forgot Password ?
                         </Link>
                     </div>
 
-                    <input
-                    type="password"
-                    className={`bg-dark-200 rounded-[6px] px-5 py-2.5 text-white`}
-                    placeholder="........"
-                    />
                 </div>
 
                 <p className="text-center text-white/60 mt-6">
