@@ -121,6 +121,24 @@ export default function LoginPage() {
                     </button>
                 </form>
 
+                {/*  Forgot Password Section */}
+                <div className={`flex flex-col gap-2`}>
+                    <div className="flex justify-between items-center">
+                        <label className={`text-sm text-light-100`}>Password</label>
+                        <Link
+                        href="/forgot-password"
+                        className={`text-primary text-xs hover:underline`}>
+                            Forgot Password ?
+                        </Link>
+                    </div>
+
+                    <input
+                    type="password"
+                    className={`bg-dark-200 rounded-[6px] px-5 py-2.5 text-white`}
+                    placeholder="........"
+                    />
+                </div>
+
                 <p className="text-center text-white/60 mt-6">
                     Don&apos;t have an account?{" "}
                     <Link href="/register" className="text-yellow-400 hover:underline">
