@@ -1,11 +1,9 @@
 import Link from "next/link";
-import SessionProvider from "@/components/providers/SessionProvider";
 
 import LightRays from "@/components/LightRays";
-import {LayoutDashboard, CheckCircle, Users, Map, Menu} from "lucide-react";
+import {LayoutDashboard, CheckCircle, Users, Map,Heart, Menu } from "lucide-react";
 
 export default function Home() {
-    const Icon = [{icon: Menu}]
 
     // features array //
     const features = [
@@ -34,7 +32,8 @@ export default function Home() {
     return (
         <div className="flex-1 w-full transition-all duration-300 min-h-screen bg-gradient-to-br from-black via-teal-950 to-gray-800">
 
-            <div className="absolute inset-0 top-0 z-0 min-h-screen ">
+            {/* Background LightRays */}
+            <div className="fixed inset-0 z-0 h-full w-full overflow-hidden pointer-events-none">
                 <LightRays
                     raysOrigin="top-center-offset"
                     raysColor="#5dfeca"
@@ -53,11 +52,11 @@ export default function Home() {
 
             {/* Header : Login and get started button link */}
             <div className=" mx-auto px-4 py-16 relative z-10">
-                <nav className="flex justify-between items-center mb-16 w-full px-4">
-                    <h1 className=" flex text-2xl font-bold text-white">
+                <nav className="flex justify-between items-center mb-16 w-full px-4 py-4">
+                    <h1 className="md:text-2xl text-base font-bold text-white whitespace-nowrap">
                         Student<span className="text-blue-700">Survival</span>Plan
                     </h1>
-                    <div className="flex items-center ">
+                    <div className="flex items-center gap-3">
                         <Link
                             href="/login"
                             className="px-6 py-2 text-white hover:text-yellow-400 transition-colors"
@@ -66,25 +65,27 @@ export default function Home() {
                         </Link>
                         <Link
                             href="/register"
-                            className="px-6 py-2 bg-white text-indigo-900 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
+                            className= "text-sm flex-shrink-0 px-3 py-2 bg-white text-indigo-900 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
                         >
                             Get Started
                         </Link>
+
                         <div className = " md:hidden">
-                            <button className="text-white">
+                            <button className="p-2 text-white">
+                                <Menu size={24}/>
                             </button>
                         </div>
                     </div>
                 </nav>
 
                 {/* Headline and info */}
-                <div className="text-center max-w-4xl mx-auto z-2">
+                <div className="flex flex-col justify-center items-center text-center max-w-4xl mx-auto z-2">
                     <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
                         Your Ultimate
                         <span className="text-blue-400"> College Survival </span>
                         Companion
                     </h2>
-                    <p className="text-xl text-white mb-8">
+                    <p className="md:whitespace-nowrap text-center text-xl text-white mb-8">
                         Manage tasks, connect with peers, explore campus, track your mood,
                         and ace your college life - all in one place!
                     </p>
@@ -93,7 +94,7 @@ export default function Home() {
                             href="/register"
                             className="px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold text-lg hover:bg-gray-300 transition-colors"
                         >
-                            Start Your Journey 🚀
+                            Start Your Journey
                         </Link>
                         <Link
                             href="/login"
@@ -115,7 +116,6 @@ export default function Home() {
                                 key={feature.title}
                                 className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-colors"
                             >
-                                {/* 3. Render it like a normal React component */}
                                 <Icon className="w-10 h-10 text-blue-400" strokeWidth={1.5} />
 
                                 <h3 className="text-xl font-semibold text-white mt-4 mb-2">
@@ -132,7 +132,7 @@ export default function Home() {
                     <div
                         className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 max-w-2xl mx-auto">
                         <h3 className="text-2xl font-bold text-white mb-4">
-                            🎓 For IIITM Students Only
+                             For IIITM Students Only
                         </h3>
                         <p className="text-white/80 mb-6">
                             Sign up with your @iiitm.ac.in email to join the exclusive
@@ -149,11 +149,15 @@ export default function Home() {
             </div>
 
             {/* Footer */}
-            <footer className="border-t border-white/10 mt-20 py-8">
-                <div className="container mx-auto px-4 text-center text-white/60">
-                    <p>Made with ❤️ for IIITM Students</p>
+            <footer className=" flex mt-20 py-8">
+                <div className="flex flex-col px-4 text-center text-white/60 w-full">
+                    <p className="flex items-center justify-center whitespace-nowrap text-md gap-2">
+                        Made with
+                        <Heart className="w-4 h-4 text-red-500 inline-block"/>
+                        for IIITM Students</p>
                 </div>
             </footer>
+            <div className="justify-baseline bottom-0 left-0 right-0 h-38 bg-gradient-to-t from-black/80 via-bg-black/30 to-transparent z-1" />
         </div>
     );
 }

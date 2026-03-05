@@ -82,19 +82,20 @@ export default function RegisterPage() {
                 <Prism
                     height={3.5}
                     baseWidth={5.5}
-                    animationType="rotate"
+                    animationType="rotate3d"
                     glow={1}
-                    noise={0.5}
+                    noise={0.4}
                     transparent
-                    scale={3.6}
+                    scale={3.1}
                     hueShift={0}
                     colorFrequency={1}
                     hoverStrength={2}
                     inertia={0.05}
                     bloom={1}
-                    timeScale={0.5}
+                    timeScale={0.3}
                 />
             </div>
+
           <div className="  z-10 w-full max-w-md">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md border border-white/20">
                 <div className="text-center mb-8">
@@ -115,7 +116,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="name"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/90 mb-2"
                         >
                             Full Name
                         </label>
@@ -125,7 +126,7 @@ export default function RegisterPage() {
                             type="text"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="John Doe"
+                            placeholder="Your Name"
                             required
                             className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
                         />
@@ -134,7 +135,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/90 mb-2"
                         >
                             College Email
                         </label>
@@ -144,7 +145,7 @@ export default function RegisterPage() {
                             type="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="yourname@iiitm.ac.in"
+                            placeholder="Your College mail@iiitm.ac.in"
                             required
                             className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
                         />
@@ -153,7 +154,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/90 mb-2"
                         >
                             Password
                         </label>
@@ -172,7 +173,7 @@ export default function RegisterPage() {
                     <div>
                         <label
                             htmlFor="confirmPassword"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/90 mb-2"
                         >
                             Confirm Password
                         </label>
@@ -191,15 +192,15 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full py-3 px-4 bg-white hover:bg-yellow-500 text-indigo-900 font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-white hover:bg-yellow-500 duration-100 text-black font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? "Creating account..." : "Create Account"}
                     </button>
                 </form>
 
-                <p className="text-center text-gray-950/60 mt-6">
+                <p className="text-center text-gray-950/80 mt-6">
                     Already have an account?{" "}
-                    <Link href="/login" className="text-blue-500 hover:underline">
+                    <Link href="/login" className="text-blue-700 hover:underline">
                         Sign in here
                     </Link>
                 </p>
