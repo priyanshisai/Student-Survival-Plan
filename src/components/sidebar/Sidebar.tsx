@@ -4,15 +4,8 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {signOut} from "next-auth/react";
 import {useState} from "react";
-import {LayoutDashboard, CheckCircle, Users, Map,UserCog,LogOut,CircleQuestionMark,Snail,ArrowLeft,ArrowRight, } from "lucide-react";
-
-const navItems = [
-    {name: "Home", href: "/home", icon: LayoutDashboard},
-    {name: "Checklist", href: "/checklist", icon: CheckCircle},
-    {name: "Community", href: "/community", icon: Users},
-    {name: "Explore", href: "/explore", icon: Map},
-    {name: "Profile", href: "/profile", icon: UserCog},
-];
+import {LogOut,CircleQuestionMark,Snail,ArrowLeft,ArrowRight, } from "lucide-react";
+import {navItems} from "@/constants/navigation";
 
 export default function Sidebar() {
     const pathname = usePathname();
@@ -25,19 +18,19 @@ export default function Sidebar() {
         <aside
             className={`${
                 isCollapsed ? "min-w-12" : "w-9%"
-            } bg-gradient-to-br from-gray-950 via-teal-950 to-gray-800 min-h-screen p-4 flex flex-col transition-all duration-300`}
+            } hidden lg:flex bg-black/87 min-h-screen p-4 flex flex-col transition-all duration-300`}
         >
 
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
-                {!isCollapsed && (
+                {/* {!isCollapsed && (
                     <h1 className="text-xl font-bold text-white">
                         Student<span className="text-blue-700">Survival</span>
                     </h1>
-                )}
+                )} */}
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="text-white hover:bg-white/10 p-2 rounded-lg"
+                    className="text-white hover:bg-white/10 p-2 rounded-lg "
                 >
                     {isCollapsed ? <ArrowRight/> : <ArrowLeft/>}
                 </button>
@@ -69,7 +62,7 @@ export default function Sidebar() {
                                     href={item.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                                         isActive
-                                            ? "bg-yellow-400 text-indigo-900 font-semibold"
+                                            ? "border-1 border-blue-400 text-blue-400 font-semibold"
                                             : "text-white hover:bg-white/10"
                                     }`}
                                 >
@@ -103,10 +96,10 @@ export default function Sidebar() {
                         </Link>
                     </>
                 )}
-                <div className="bg-white rounded-lg">
+                <div className="bg-gray-200 rounded-lg w-2/3">
                 <button
                     onClick={() => signOut({callbackUrl: "/login"})}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 text-xl hover:bg-red-500/20 transition-all w-full ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 text-lg hover:bg-red-500/20 transition-all w-full ${
                         isCollapsed ? "justify-center" : ""
                     }`}
                 >
@@ -118,3 +111,28 @@ export default function Sidebar() {
         </aside>
     );
 }
+
+export function MobileNav(){
+    const pathname = usePathname();
+    return (
+        <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-white/10 px-6 py-3 z-50 bg-[oklch(27.5%_0.011_216.9)]">
+            <ul className="flex justify-between items-center list-none">
+                {navItems.map((item) => {
+                    const isActive = pathname === item.href;
+                    const Icon = item.icon;
+                    return(
+                        <li key={item.name}>
+                    <Link href={item.href} className="flex flex-col items-center gap-1">
+                            <Icon className={`size-6 ${isActive? "border-1 border-blue-400 text-blue-400 font-semibold"
+                                : "text-white hover:bg-white/10"}`} />
+                    <span className={`text-[10px] ${isActive ? "text-white font-bold" : "text-gray-400"}`}>
+                        {item.name}
+                    </span>
+                    </Link>
+                </li>
+                );
+            })}
+            </ul>
+        </nav>
+    );
+};

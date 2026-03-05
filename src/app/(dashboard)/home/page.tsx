@@ -5,7 +5,9 @@ import {useSession} from "next-auth/react";
 import {createMoodCheckIn, getTodaysMood} from "@/lib/actions/mood";
 import {getTodayLeaderboard, getUserStats} from "@/lib/actions/leaderboard";
 import {getTodoStats} from "@/lib/actions/todos";
-import {PackageOpen, CircleQuestionMark, UserStar, BugPlay,} from "lucide-react";
+import {PackageOpen, CircleQuestionMark, UserStar, BugPlay,Handshake,} from "lucide-react";
+import TextType from '@/components/TextType';
+import Grainient from "@/components/Grainient";
 import {redirect} from "next/navigation";
 
 const moods = [
@@ -42,7 +44,7 @@ const helpOptions = [
     {
         id: "advice",
         title: "Need some Advice!",
-        icon: BugPlay,
+        icon: Handshake,
         description: "Seek guidance from seniors",
         color: "bg-[oklch(66.6%_0.179_58.138)]",
     },
@@ -119,6 +121,10 @@ export default function HomePage() {
         return "Good Evening";
     };
 
+    const userName = session?.user?.name?.split(" ")[0] || "Student";
+    const fullGreeting = `${greeting()}, ${userName} !
+ Have a good day!! `;
+
 
     if (status === "loading"){
         return <div>Loading...</div>;
@@ -127,15 +133,53 @@ export default function HomePage() {
     return (
 
 
-        <div className="p-6 w-full-screen min-h-screen z-0 bg-gradient-to-br from-gray-950 via-teal-950 to-gray-800">
-            <div className=" z-0">
+        <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80">
+
+            <div  className="min-h-screen w-full absolute inset-0 -z-2">
+                <Grainient
+                    color1="#303746"
+                    color2="#364ba1"
+                    color3="#343783"
+                    timeSpeed={0.25}
+                    colorBalance={0}
+                    warpStrength={1}
+                    warpFrequency={5}
+                    warpSpeed={2}
+                    warpAmplitude={50}
+                    blendAngle={0}
+                    blendSoftness={0.05}
+                    rotationAmount={500}
+                    noiseScale={2}
+                    grainAmount={0.1}
+                    grainScale={2}
+                    grainAnimated={false}
+                    contrast={1.5}
+                    gamma={1}
+                    saturation={1}
+                    centerX={0}
+                    centerY={0}
+                    zoom={0.9}
+                />
+            </div>
+            <div className="m-5 relative z-10 border-1 border-gray-400 rounded-3xl bg-gray-700/30 0 p-5 min-h-screen">
 
                 {/* Header */}
                 <div className="mb-8 mt-5">
-                    <h1 className="text-3xl font-bold text-white">
-                        {greeting()}, {session?.user?.name?.split(" ")[0] || "Student"}! 👋
+                    <h1 className="text-xl font-bold text-white">
+                    <TextType
+                        text={[fullGreeting]}
+                        typingSpeed={170}
+                        pauseDuration={2300}
+                        showCursor
+                        cursorCharacter="_"
+                        texts={["Welcome to React Bits! Good to see you!","Build some amazing experiences!"]}
+                        deletingSpeed={100}
+                        variableSpeedEnabled
+                        variableSpeedMin={90}
+                        variableSpeedMax={185}
+                        cursorBlinkDuration={0.5}
+                    />
                     </h1>
-                    <p className="text-white mt-1">How&apos;s your survival journey going today?</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
