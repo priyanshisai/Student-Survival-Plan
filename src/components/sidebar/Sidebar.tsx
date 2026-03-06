@@ -115,7 +115,7 @@ export default function Sidebar() {
 export function MobileNav(){
     const pathname = usePathname();
     return (
-        <nav className="lg:hidden fixed bottom-0 left-0 right-0 border-t border-white/10 px-6 py-3 z-50 bg-[oklch(27.5%_0.011_216.9)]">
+        <nav className="lg:hidden fixed -bottom-[1px] left-0 right-0   border-white/10 px-6 py-4 z-50 bg-[oklch(27.5%_0.011_216.9)]">
             <ul className="flex justify-between items-center list-none">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;

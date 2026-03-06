@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {useSession} from "next-auth/react";
-import {GridScan} from "@/components/GridScan";
+import {GridScan} from "@/components/active/GridScan";
 
 interface MoodEntry {
     date: string;

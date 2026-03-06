@@ -1,0 +1,27 @@
+import {PackageOpen, CircleQuestionMark, UserStar, Handshake,} from "lucide-react";
+
+export const helpOptions = [
+    {id: "item", title: "Request an Item",
+        icon: PackageOpen,
+        description: "Need something? Ask the community!",
+        color: "bg-[oklch(45%_0.085_224.283)]",
+    },
+    {id: "wtf",
+        title: "WTF is this?",
+        icon: CircleQuestionMark,
+        description: "Confused about something? Get answers!",
+        color: "bg-[oklch(35.7%_0.09_281.288)]",
+    },
+    {id: "prof",
+        title: "How's this Prof?",
+        icon: UserStar,
+        description: "Get reviews about professors",
+        color: "bg-[oklch(37.8%_0.077_168.94)]",
+    },
+    {id: "advice",
+        title: "Need some Advice!",
+        icon: Handshake,
+        description: "Seek guidance from seniors",
+        color: "bg-[oklch(37.9%_0.146_265.522)]",
+    },
+];

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import LightRays from "@/components/LightRays";
+import LightRays from "@/components/active/LightRays";
 import {LayoutDashboard, CheckCircle, Users, Map,Heart, Menu } from "lucide-react";
 
 export default function Home() {
@@ -80,7 +80,7 @@ export default function Home() {
 
                 {/* Headline and info */}
                 <div className="flex flex-col justify-center items-center text-center max-w-4xl mx-auto z-2">
-                    <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
+                    <h2 className="text-4xl md:text-7xl font-bold text-white mb-7">
                         Your Ultimate
                         <span className="text-blue-400"> College Survival </span>
                         Companion
@@ -89,10 +89,12 @@ export default function Home() {
                         Manage tasks, connect with peers, explore campus, track your mood,
                         and ace your college life - all in one place!
                     </p>
+
+                    {/* Center buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
                             href="/register"
-                            className="px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold text-lg hover:bg-gray-300 transition-colors"
+                            className="px-8 py-4 bg-white text-indigo-900 rounded-xl font-bold text-lg  hover:bg-gray-300 transition-colors"
                         >
                             Start Your Journey
                         </Link>

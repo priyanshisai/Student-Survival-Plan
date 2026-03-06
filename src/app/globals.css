@@ -128,7 +128,15 @@ html, body {
 @utility card-shadow {
     box-shadow: 0px 4px 40px 0px #00000066;
     }
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
 
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
 
 {/*   defines colors,fonts and sizes  */}
 @layer base {
@@ -155,6 +163,53 @@ html, body {
     ul {
         @apply list-disc list-inside;
     }
+}
+
+@layer utilities {
+    .glow-card {
+        position: relative;
+        border-radius: 9999px;
+        background: #0f172a;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glow-item:hover {
+        box-shadow: inset 0 0 15px rgba(13, 110, 150, 0.5); /* Inner glow */
+        filter: drop-shadow(0 0 10px rgba(13, 110, 150, 0.6)); /* Outer haze */
+        border-color: rgba(13, 110, 150, 0.5);
+    }
+
+    .glow-wtf:hover {
+        box-shadow: inset 0 0 15px rgba(66, 45, 128, 0.5);
+        filter: drop-shadow(0 0 10px rgba(66, 45, 128, 0.6));
+        border-color: rgba(66, 45, 128, 0.5);
+    }
+
+    .glow-prof:hover {
+        box-shadow: inset 0 0 15px rgba(15, 87, 69, 0.5);
+        filter: drop-shadow(0 0 10px rgba(15, 87, 69, 0.6));
+        border-color: rgba(15, 87, 69, 0.5);
+    }
+
+    .glow-advice:hover {
+        box-shadow: inset 0 0 15px rgba(186, 110, 4, 0.5);
+        filter: drop-shadow(0 0 10px rgba(186, 110, 4, 0.6));
+        border-color: rgba(186, 110, 4, 0.5);
+    }
+}
+
+@layer utilities {
+    .btn-capsule-glow {
+        border-radius: 9999px;
+        background-color: #0d1e38;
+        transition: box-shadow 0.3s ease-in-out;
+        filter: drop-shadow(0 0 8px rgba(121, 63, 219, 0.4));
+    }
+    .btn-item:hover { filter: drop-shadow(0 0 12px rgba(13, 110, 150, 0.7)); }
+    .btn-wtf:hover { filter: drop-shadow(0 0 12px rgba(66, 45, 128, 0.7)); }
+    .btn-prof:hover { filter: drop-shadow(0 0 12px rgba(15, 87, 69, 0.7)); }
+    .btn-advice:hover { filter: drop-shadow(0 0 12px rgba(186, 110, 4, 0.7)); }
 }
 
 @layer components {

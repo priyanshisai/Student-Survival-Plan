@@ -3,8 +3,8 @@
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import {GridScan} from "@/components/GridScan";
-import Prism from "@/components/Prism";
+import {GridScan} from "@/components/active/GridScan";
+import Prism from "@/components/active/Prism";
 
 export default function RegisterPage() {
     const router = useRouter();
