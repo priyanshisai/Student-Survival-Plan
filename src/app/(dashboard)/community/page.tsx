@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Grainient from "@/components/active/Grainient";
+import {Building2,Trophy,Library,Rocket,X,MapPinPlus,UserRoundPlus } from "lucide-react";
 
 interface StudyGroup {
   id: string;
@@ -17,7 +19,7 @@ interface CampusSpot {
   type: string;
 }
 
-// Mock data
+{/*Mock data */}
 const studyGroups: StudyGroup[] = [
   { id: "1", name: "DSA Warriors", description: "Crack coding interviews together!", members: 45, tags: ["DSA", "Coding", "Interviews"] },
   { id: "2", name: "ML Enthusiasts", description: "Explore machine learning projects", members: 32, tags: ["ML", "AI", "Python"] },
@@ -50,61 +52,143 @@ export default function CommunityPage() {
     group.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     group.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+  const [showBanner, setShowBanner] = useState(true);
 
+  const toggleBanner = () => {
+    setShowBanner(prev => !prev);
+  };
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+      <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80">
+
+    <div className="min-h-screen w-full absolute inset-0 -z-2">
+      <Grainient
+          color1="#303746"
+          color2="#364ba1"
+          color3="#343783"
+          timeSpeed={0.25}
+          colorBalance={0}
+          warpStrength={1}
+          warpFrequency={5}
+          warpSpeed={2}
+          warpAmplitude={50}
+          blendAngle={0}
+          blendSoftness={0.05}
+          rotationAmount={500}
+          noiseScale={2}
+          grainAmount={0.1}
+          grainScale={2}
+          grainAnimated={false}
+          contrast={1.5}
+          gamma={1}
+          saturation={1}
+          centerX={0}
+          centerY={0}
+          zoom={0.9}
+      />
+    </div>
+
+    {/* Floating section (main) */}
+    <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
+            border-1 border-gray-400 rounded-3xl bg-gray-700/30
+            animate-float mb-20">
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Community 👥</h1>
-        <p className="text-gray-600 mt-1">Connect, collaborate, and grow together!</p>
+        <h1 className="text-3xl font-bold text-white">Our Community </h1>
+        <p className="text-gray-200/70 mt-1">Connect, collaborate, and grow together!</p>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-200">
         {[
-          { id: "groups", label: "Study Groups", icon: "📚" },
-          { id: "leaderboard", label: "Leaderboard", icon: "🏆" },
-          { id: "spots", label: "Is it Open?", icon: "🏪" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`px-4 py-3 font-medium transition-colors border-b-2 -mb-px ${
-              activeTab === tab.id
-                ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+          { id: "groups", label: "Your People", icon: Rocket},
+          { id: "leaderboard", label: "Leaderboard", icon: Trophy },
+          { id: "spots", label: "Is it Open?", icon: Building2 },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          return (
+              <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`flex gap-2 px-4 py-3 font-medium transition-colors border-b-2 -mb-px ${
+                      activeTab === tab.id
+                          ? "border-indigo-600 text-indigo-600"
+                          : "border-transparent text-gray-300 hover:text-gray-700"
+                  }`}
+              >
+                <Icon />
+                <span className="hidden md:block ">{tab.label}
+                </span>
+              </button>
+          );
+        })}
       </div>
 
       {/* Study Groups Tab */}
       {activeTab === "groups" && (
         <div>
+
           {/* Search & Create */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex flex-row sm:flex-row gap-4 mb-6">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search groups by name or tag..."
-              className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-indigo-500"
+              className="flex-1 px-4 py-3 rounded-lg border border-gray-200 text-white focus:outline-none focus:border-indigo-500"
             />
-            <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
-              + Create Group
+            {!showBanner && (
+                /* Find Your People */
+                <button
+                    onClick={() => setShowBanner(true)}
+                    className="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium font-medium flex items-center gap-2"
+                >
+                  <Rocket size={17} />
+                  <span className="hidden md:block "> Find your People
+                  </span>
+                </button>
+            )}
+            {/* Create Group */}
+            <button className="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center gap-2">
+              <UserRoundPlus size={17}/>
+              <span className="hidden md:block ">
+                Create Group
+              </span>
             </button>
           </div>
 
           {/* Find Your People */}
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-6 text-white mb-6">
-            <h2 className="text-xl font-semibold mb-2">Find Your People 🔍</h2>
-            <p className="opacity-90 mb-4">Tell us your interests and we&apos;ll match you with like-minded students!</p>
-            <button className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-              Take Interest Quiz
-            </button>
-          </div>
+          {showBanner && (
+              <div className="relative bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl p-8 mb-8 shadow-lg overflow-hidden">
+
+                {/* Close Button */}
+                <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowBanner(false);
+                    }}
+                    className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/40 rounded-full transition-all z-50 cursor-pointer active:scale-90"
+                    style={{ pointerEvents: 'auto' }}
+                    aria-label="Close banner"
+                >
+                  <X size={20} className="text-white/80 group-hover:text-white" />
+                </button>
+
+                {/* Banner Content */}
+                <div className="relative z-10">
+                  <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                    Find Your People 🔍
+                  </h2>
+                  <p className="text-indigo-100 mb-6 max-w-md">
+                    Tell us your interests and we'll match you with like-minded students!
+                  </p>
+                  <button className="px-6 py-2 bg-white text-indigo-600 rounded-xl font-semibold hover:bg-indigo-50 shadow-md transition-all active:scale-95">
+                    Take Interest Quiz
+                  </button>
+                </div>
+                <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+              </div>
+          )}
 
           {/* Groups Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -193,12 +277,15 @@ export default function CommunityPage() {
               ))}
             </div>
           </div>
-
-          <button className="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium">
-            📍 Update a Location Status
+          <button className="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center gap-2">
+            <MapPinPlus />
+            <span>
+              Update a Location Status
+            </span>
           </button>
         </div>
       )}
     </div>
+      </div>
   );
 }
