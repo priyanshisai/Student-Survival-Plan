@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Grainient from "@/components/active/Grainient";
+import {MapPinned, Star, SquarePen,Library,NotebookPen,Pizza,Volleyball,Drama,Store, } from "lucide-react";
 
 interface Location {
   id: string;
@@ -24,9 +26,9 @@ interface BlogPost {
 // Mock data
 const locations: Location[] = [
   { id: "1", name: "Learning Resource Centre", type: "study", rating: 4.5, reviews: 120, description: "Best place for focused study", explored: true },
-  { id: "2", name: "Nescafe Corner", type: "food", rating: 4.2, reviews: 89, description: "Great coffee and snacks", explored: true },
-  { id: "3", name: "Sports Complex", type: "sports", rating: 4.8, reviews: 156, description: "Modern gym and sports facilities", explored: false },
-  { id: "4", name: "Cafeteria", type: "food", rating: 4.0, reviews: 45, description: " XYZ", explored: true },
+  { id: "2", name: "Nescafe", type: "food", rating: 4.2, reviews: 89, description: "Great coffee and snacks", explored: true },
+  { id: "3", name: "Sports Complex", type: "sports", rating: 4.8, reviews: 156, description: "Place to play if you have equipments", explored: false },
+  { id: "4", name: "Cafeteria", type: "food", rating: 4.0, reviews: 45, description: "Ice-cream and beverages", explored: true },
   { id: "5", name: "Open Air Theatre", type: "venue", rating: 4.6, reviews: 78, description: "Perfect for events and shows", explored: false },
   { id: "6", name: "Stationary", type: "store", rating: 4.7, reviews: 34, description: "Only place to get statinoary stuff without instamart or blinkit", explored: false },
 ];
@@ -37,12 +39,12 @@ const blogPosts: BlogPost[] = [
   { id: "3", title: "Surviving Mid-Sems: A Guide", author: "Amit M.", excerpt: "Tips and tricks that actually work...", likes: 123, date: "2024-02-05" },
 ];
 
-const typeIcons: Record<string, string> = {
-  study: "📚",
-  food: "🍕",
-  sports: "🏀",
-  lab: "💻",
-  venue: "🎭",
+const typeIcons: Record<string, any> = {
+  study: Library,
+  food: Pizza,
+  sports: Volleyball,
+  venue: Drama,
+  store: Store,
 };
 
 export default function ExplorePage() {
@@ -57,52 +59,93 @@ export default function ExplorePage() {
   const explorationProgress = (exploredCount / locations.length) * 100;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Explore Campus 🗺️</h1>
-        <p className="text-gray-600 mt-1">Discover hidden gems and share your experiences!</p>
-      </div>
+      <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80 flex flex-col">
 
-      {/* Exploration Progress */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-6 text-white mb-6">
-        <div className="flex justify-between items-center mb-3">
-          <div>
-            <h2 className="text-xl font-semibold">Area Explored</h2>
-            <p className="opacity-80">Keep exploring to unlock badges!</p>
-          </div>
-          <div className="text-right">
-            <span className="text-4xl font-bold">{exploredCount}/{locations.length}</span>
-            <p className="text-sm opacity-80">locations</p>
-          </div>
-        </div>
-        <div className="w-full bg-white/30 rounded-full h-3">
-          <div 
-            className="bg-yellow-400 h-3 rounded-full transition-all duration-500"
-            style={{ width: `${explorationProgress}%` }}
+        <div className="min-h-screen w-full absolute inset-0 -z-2">
+          <Grainient
+              color1="#303746"
+              color2="#364ba1"
+              color3="#343783"
+              timeSpeed={0.25}
+              colorBalance={0}
+              warpStrength={1}
+              warpFrequency={5}
+              warpSpeed={2}
+              warpAmplitude={50}
+              blendAngle={0}
+              blendSoftness={0.05}
+              rotationAmount={500}
+              noiseScale={2}
+              grainAmount={0.1}
+              grainScale={2}
+              grainAnimated={false}
+              contrast={1.5}
+              gamma={1}
+              saturation={1}
+              centerX={0}
+              centerY={0}
+              zoom={0.9}
           />
         </div>
+
+          {/* Floating section (main) */}
+          <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
+            border-1 border-gray-400 rounded-3xl bg-gray-700/30
+            animate-float mb-20">
+
+      {/* Header */}
+      <div className="mb-5 flex flex-col md:flex-row  gap-4 ">
+        <div className="flex flex-col">
+        <h1 className="text-2xl text-white/90">Explore Campus 🗺️</h1>
+        <p className="text-gray-400 mt-1">Discover hidden gems and share your experiences!</p>
+        </div>
+
+
+        {/* Exploration Progress Bar */}
+        <div className="bg-gray-800/60 rounded-2xl p-4 text-white mb-3 w-full">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <h2 className="text-md font-semibold">Area Explored</h2>
+              <p className="opacity-80 text-sm">Keep exploring to unlock badges!</p>
+            </div>
+            <div className="text-right">
+              <span className="text-xl font-bold">{exploredCount}/{locations.length}</span>
+              <p className="text-sm opacity-80">locations</p>
+            </div>
+          </div>
+          <div className="w-full bg-white/30 rounded-full h-2">
+            <div
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${explorationProgress}%` }}
+            />
+          </div>
+        </div>
       </div>
 
+
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-200">
+      <div className="flex flex-row gap-2 mb-4 border-b border-gray-200">
         {[
-          { id: "map", label: "Campus Map", icon: "🗺️" },
-          { id: "best", label: "What's Best?", icon: "⭐" },
-          { id: "blog", label: "Student Blogs", icon: "📝" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`px-4 py-3 font-medium transition-colors border-b-2 -mb-px ${
-              activeTab === tab.id
-                ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
+          { id: "map", label: "Campus Map", icon: MapPinned },
+          { id: "best", label: "What's Best?", icon: Star },
+          { id: "blog", label: "Student Blogs", icon: SquarePen},
+        ].map((tab) => {
+          const Icon = tab.icon;
+          return (
+              <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`flex flex-row items-center gap-2 px-4 py-3 font-medium transition-colors border-b-2 -mb-px ${
+                      activeTab === tab.id
+                          ? "border-indigo-600 text-indigo-600"
+                          : "border-transparent text-white/80 hover:text-gray-700"
+                  }`}
+              ><Icon size={17}/>
+                <span className="hidden md:block "> {tab.label}
+            </span>
+              </button>
+          );
+        })}
       </div>
 
       {/* Campus Map Tab */}
@@ -117,37 +160,6 @@ export default function ExplorePage() {
                 <p className="text-sm text-gray-400">Coming soon with real-time locations!</p>
               </div>
             </div>
-          </div>
-
-          {/* Location Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {locations.map((location) => (
-              <div 
-                key={location.id} 
-                className={`bg-white rounded-xl p-4 shadow-sm border ${
-                  location.explored ? "border-green-200" : "border-gray-100"
-                }`}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">{typeIcons[location.type]}</span>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800">{location.name}</h3>
-                    <div className="flex items-center gap-1">
-                      <span className="text-yellow-500">★</span>
-                      <span className="text-sm text-gray-600">{location.rating}</span>
-                      <span className="text-sm text-gray-400">({location.reviews})</span>
-                    </div>
-                  </div>
-                  {location.explored && (
-                    <span className="text-green-500 text-xl">✓</span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 mb-3">{location.description}</p>
-                <button className="w-full py-2 text-sm border border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
-                  {location.explored ? "View Details" : "Mark as Explored"}
-                </button>
-              </div>
-            ))}
           </div>
         </div>
       )}
@@ -167,17 +179,19 @@ export default function ExplorePage() {
             >
               All
             </button>
-            {Object.entries(typeIcons).map(([type, icon]) => (
+            {Object.entries(typeIcons).map(([type, Icon]) => (
               <button
                 key={type}
                 onClick={() => setSelectedType(type)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`flex flex-row gap-2 px-3 py-2 rounded-lg font-medium transition-colors ${
                   selectedType === type
                     ? "bg-indigo-600 text-white"
                     : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                 }`}
               >
-                {icon} {type.charAt(0).toUpperCase() + type.slice(1)}
+                <Icon/>
+                <span className="hidden md:block ">{type.charAt(0).toUpperCase() + type.slice(1)}
+                </span>
               </button>
             ))}
           </div>
@@ -186,51 +200,57 @@ export default function ExplorePage() {
           <div className="space-y-4">
             {filteredLocations
               .sort((a, b) => b.rating - a.rating)
-              .map((location, index) => (
-                <div key={location.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                  <div className="flex items-center gap-4">
-                    <span className="text-3xl font-bold text-indigo-200">#{index + 1}</span>
-                    <span className="text-3xl">{typeIcons[location.type]}</span>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-lg">{location.name}</h3>
-                      <p className="text-sm text-gray-600">{location.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-yellow-500">
-                        <span>★</span>
-                        <span className="font-bold text-gray-800">{location.rating}</span>
+              .map((location, index) => {
+                const Icon = typeIcons[location.type];
+                return (
+                    <div key={location.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                      <div className="flex items-center gap-4">
+                        <span className="text-xl font-bold text-indigo-800">#{index + 1}</span>
+                        <Icon />
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800 text-lg">{location.name}</h3>
+                          <p className="text-sm text-gray-600">{location.description}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-center gap-1 text-yellow-500">
+                            <span>★</span>
+                            <span className="font-bold text-gray-800">{location.rating}</span>
+                          </div>
+                          <p className="text-sm text-gray-400">{location.reviews} reviews</p>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-400">{location.reviews} reviews</p>
                     </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       )}
 
       {/* Blog Tab */}
       {activeTab === "blog" && (
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">Student Stories</h2>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
-              ✍️ Write a Blog
+        <div >
+          {/* Write a blog button */}
+          <div className="flex justify-end-safe items-center mb-4">
+            <button className=" flex flex-row gap-2 items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+             <NotebookPen size={18} />
+              <span > Write a blog </span>
             </button>
           </div>
 
-          <div className="space-y-4">
+          <div className="flex md:flex-row flex-col h-full gap-2 justify-between">
             {blogPosts.map((post) => (
-              <div key={post.id} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+              <div key={post.id} className="bg-white rounded-xl p-3 w-full shadow-sm border border-gray-100">
+                <div className="flex-1">
                 <h3 className="font-semibold text-gray-800 text-lg mb-2">{post.title}</h3>
-                <p className="text-gray-600 mb-3">{post.excerpt}</p>
+                <p className="text-gray-600 mb-2 text-md">{post.excerpt}</p>
+                </div>
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-4 text-gray-500">
-                    <span>By {post.author}</span>
-                    <span>{post.date}</span>
+                    <span className="text-black/70 text-xs"> ~{post.author}</span>
+                    <span className="text-xs text-black/60">{post.date}</span>
                   </div>
                   <div className="flex items-center gap-1 text-red-500">
-                    <span>❤️</span>
+                    <span>♥️</span>
                     <span>{post.likes}</span>
                   </div>
                 </div>
@@ -240,5 +260,6 @@ export default function ExplorePage() {
         </div>
       )}
     </div>
+      </div>
   );
 }

@@ -29,11 +29,12 @@ const studyGroups: StudyGroup[] = [
 
 const campusSpots: CampusSpot[] = [
   { id: "1", name: "Nescafe", isOpen: true, type: "cafe" },
-  { id: "2", name: "Main Cafeteria", isOpen: true, type: "cafeteria" },
-  { id: "3", name: "OAT (Open Air Theatre)", isOpen: false, type: "venue" },
-  { id: "4", name: "Library", isOpen: true, type: "study" },
-  { id: "5", name: "Computer Lab 1", isOpen: true, type: "lab" },
-  { id: "6", name: "Sports Complex", isOpen: false, type: "sports" },
+  { id: "2", name: "Cafeteria", isOpen: true, type: "cafeteria" },
+  { id: "3", name: "OAT", isOpen: false, type: "venue" },
+  { id: "4", name: "LRC", isOpen: true, type: "study" },
+  { id: "5", name: "Sports Complex", isOpen: false, type: "sports" },
+  { id: "6", name: "Fruit Shop", isOpen: false, type: "shop" },
+  { id: "7", name: "Stationary", isOpen: false, type: "shop" },
 ];
 
 const leaderboardData = [
@@ -58,7 +59,7 @@ export default function CommunityPage() {
     setShowBanner(prev => !prev);
   };
   return (
-      <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80">
+      <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80 flex flex-col">
 
     <div className="min-h-screen w-full absolute inset-0 -z-2">
       <Grainient
@@ -87,14 +88,15 @@ export default function CommunityPage() {
       />
     </div>
 
+        <main className="flex-1 pb-24">
     {/* Floating section (main) */}
     <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
             border-1 border-gray-400 rounded-3xl bg-gray-700/30
             animate-float mb-20">
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Our Community </h1>
+      <div className="mb-6">
+        <h1 className="text-2xl invisible md:block font-bold text-white">Our Community </h1>
         <p className="text-gray-200/70 mt-1">Connect, collaborate, and grow together!</p>
       </div>
 
@@ -138,7 +140,7 @@ export default function CommunityPage() {
               className="flex-1 px-4 py-3 rounded-lg border border-gray-200 text-white focus:outline-none focus:border-indigo-500"
             />
             {!showBanner && (
-                /* Find Your People */
+                /* Find Your People Button */
                 <button
                     onClick={() => setShowBanner(true)}
                     className="px-5 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium font-medium flex items-center gap-2"
@@ -157,7 +159,7 @@ export default function CommunityPage() {
             </button>
           </div>
 
-          {/* Find Your People */}
+          {/* Find Your People Quiz popup*/}
           {showBanner && (
               <div className="relative bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl p-8 mb-8 shadow-lg overflow-hidden">
 
@@ -175,18 +177,19 @@ export default function CommunityPage() {
                 </button>
 
                 {/* Banner Content */}
-                <div className="relative z-10">
-                  <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                    Find Your People 🔍
+                <div className="relative z-10 ">
+                  <h2 className="text-xl md:text-md font-bold text-white mb-1.5 flex items-center gap-2">
+                    Find Your People !
                   </h2>
-                  <p className="text-indigo-100 mb-6 max-w-md">
+                  <p className="text-indigo-100 mb-4 md:mb-3 max-w-md text-sm">
                     Tell us your interests and we'll match you with like-minded students!
                   </p>
+                  {/* Take quiz button */}
                   <button className="px-6 py-2 bg-white text-indigo-600 rounded-xl font-semibold hover:bg-indigo-50 shadow-md transition-all active:scale-95">
-                    Take Interest Quiz
+                    <span className="text-md md:text-sm"> Take Interest Quiz </span>
                   </button>
                 </div>
-                <div className="absolute -bottom-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+
               </div>
           )}
 
@@ -244,9 +247,9 @@ export default function CommunityPage() {
         </div>
       )}
 
-      {/* Campus Spots Tab */}
+      {/* Campus Spots Tab {Is OPEN status} */}
       {activeTab === "spots" && (
-        <div>
+        <div className="flex justify-center flex-col">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Campus Status 🏫</h2>
             <p className="text-gray-600 mb-4">Real-time status of campus facilities updated by students</p>
@@ -277,15 +280,19 @@ export default function CommunityPage() {
               ))}
             </div>
           </div>
-          <button className="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center gap-2">
+          <button className="self-center px-3 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center gap-2">
             <MapPinPlus />
             <span>
               Update a Location Status
             </span>
           </button>
         </div>
+
+
       )}
     </div>
+        </main>
       </div>
   );
 }
+

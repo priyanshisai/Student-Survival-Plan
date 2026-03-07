@@ -3,6 +3,7 @@
 import {useState} from "react";
 import {useSession} from "next-auth/react";
 import {GridScan} from "@/components/active/GridScan";
+import Grainient from "@/components/active/Grainient";
 
 interface MoodEntry {
     date: string;
@@ -51,8 +52,38 @@ export default function ProfilePage() {
     const productivityStreak = 12; // days
 
     return (
-        <div className="p-6 max-w-4xl mx-auto bg-auto">
+        <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80 flex flex-col">
+            <div className="min-h-screen w-full absolute inset-0 -z-2">
+                <Grainient
+                    color1="#303746"
+                    color2="#364ba1"
+                    color3="#343783"
+                    timeSpeed={0.25}
+                    colorBalance={0}
+                    warpStrength={1}
+                    warpFrequency={5}
+                    warpSpeed={2}
+                    warpAmplitude={50}
+                    blendAngle={0}
+                    blendSoftness={0.05}
+                    rotationAmount={500}
+                    noiseScale={2}
+                    grainAmount={0.1}
+                    grainScale={2}
+                    grainAnimated={false}
+                    contrast={1.5}
+                    gamma={1}
+                    saturation={1}
+                    centerX={0}
+                    centerY={0}
+                    zoom={0.9}
+                />
+            </div>
 
+                {/* Floating section (main) */}
+                <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
+            border-1 border-gray-400 rounded-3xl bg-gray-700/30
+            animate-float mb-20">
 
             {/* Profile Header */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
@@ -74,7 +105,6 @@ export default function ProfilePage() {
                         <h1 className="text-2xl font-bold text-gray-800">
                             {session?.user?.name || "Student"}
                         </h1>
-                        <p className="text-gray-500">{session?.user?.email}</p>
                         <div className="flex flex-wrap justify-center sm:justify-start gap-3 mt-3">
               <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium">
                 🔥 {productivityStreak} day streak
@@ -99,6 +129,26 @@ export default function ProfilePage() {
                             <p className="text-2xl font-bold text-purple-600">5</p>
                             <p className="text-sm text-gray-500">Badges</p>
                         </div>
+                    </div>
+                </div>
+
+                {/* Interests */}
+                <div className="flex flex-col bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mt-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold text-gray-800">Interests</h2>
+                        <button className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                            + Add
+                        </button>
+                    </div>
+                    <div className="flex gap-2">
+                        {interests.map((interest) => (
+                            <span
+                                key={interest}
+                                className="px-4 py-2 md:bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium"
+                            >
+                  {interest},
+                </span>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -151,25 +201,6 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* Interests */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-lg font-semibold text-gray-800">Interests</h2>
-                            <button className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
-                                + Add
-                            </button>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {interests.map((interest) => (
-                                <span
-                                    key={interest}
-                                    className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium"
-                                >
-                  {interest}
-                </span>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             )}
 
@@ -316,6 +347,7 @@ export default function ProfilePage() {
                     )}
                 </div>
             )}
+        </div>
         </div>
     );
 }

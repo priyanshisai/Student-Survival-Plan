@@ -179,12 +179,12 @@ export default function ChecklistPage() {
             {/* Floating section (main) */}
             <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
             border-1 border-gray-400 rounded-3xl bg-gray-700/30
-            animate-float mb-20">
+            animate-float mb-20 ">
 
-                    <div className="flex flex-col md:flex-row p-3 w-full md:mt-20 mt-6 gap-10 justify-between mb-19">
+                    <div className="flex flex-col md:flex-row p-3 w-full md:mt-20 mt-6 gap-8 ">
 
                         {/* Left Section */}
-                        <div className="flex flex-col ml-0 md:ml-20 ">
+                        <div className="flex flex-col flex-1">
 
                             {/* Header */}
                             <div className="mb-8">
@@ -192,11 +192,11 @@ export default function ChecklistPage() {
                             </div>
 
                             {/* Progress Bar */}
-                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6 w-full">
+                            <div className="bg-gray-800/60 rounded-2xl p-6 shadow-sm  mb-6 w-full">
                                 <div className="flex justify-between items-center mb-3">
-                                    <span className="font-medium text-gray-700">Today&apos;s Progress</span>
+                                    <span className="font-medium text-white/90">Today&apos;s Progress</span>
                                     <span
-                                        className="text-sm text-gray-500">{completedCount}/{totalCount} completed</span>
+                                        className="text-sm text-gray-200">{completedCount}/{totalCount} completed</span>
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-3">
                                     <div
@@ -207,7 +207,7 @@ export default function ChecklistPage() {
                             </div>
 
                             {/* Add New Task */}
-                            <div className="hidden md:block bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+                            <div className="hidden md:block bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6 ">
                                 <h2 className="font-semibold text-gray-800 mb-4">Add New Task</h2>
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <input
@@ -224,18 +224,16 @@ export default function ChecklistPage() {
                                         className="px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-indigo-500 bg-white"
                                     >
                                         {Object.entries(categoryConfig).map(([key, config]) => {
-                                            const Icon = config.visual;
                                             return (
                                                 <option key={key} value={key}>
-                                                    <span>{config.label}
-                                    </span>
+                                                    {config.label}
                                                 </option>
                                             );
                                         })}
                                     </select>
                                     <button
                                         onClick={addTodo}
-                                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+                                        className="text-nowrap px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                                     >
                                         Add Task
                                     </button>
@@ -244,7 +242,7 @@ export default function ChecklistPage() {
                         </div>
 
                         {/* Right Section */}
-                        <div className=" flex flex-col md:mr-20 ">
+                        <div className=" flex flex-col flex-1">
 
 
                             <div className="flex flex-row justify-between w-full gap-2 mb-6">
@@ -268,13 +266,13 @@ export default function ChecklistPage() {
                                         <button
                                             key={key}
                                             onClick={() => setFilterCategory(key as Category)}
-                                            className={`flex flex-row gap-2 px-4 py-2 rounded-lg font-xs justify-between items-center transition-colors ${
+                                            className={`flex flex-row gap-2 px-4 py-2 rounded-lg font-xs justify-between w-full items-center text-center transition-colors ${
                                                 filterCategory === key
                                                     ? "bg-indigo-600 text-white"
                                                     : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
                                             }`}
                                         >
-                                            <Icon size={17}/>
+                                            <Icon size={15}/>
                                             <span className="hidden md:inline whitespace-nowrap">
                                     {config.label}
                                 </span>
@@ -357,13 +355,6 @@ export default function ChecklistPage() {
                             </div>
                         </div>
 
-                        {/* Mobile View Button */}
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="md:hidden fixed bottom-8 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center z-40 active:scale-90 transition-transform"
-                        >
-                            <ListPlus size={30}/>
-                        </button>
 
                         {/* MOBILE POP-UP*/}
                         {
@@ -397,6 +388,14 @@ export default function ChecklistPage() {
                         }
                     </div>
             </div>
+
+            {/* Mobile View Button */}
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="z-50 flex flex-col md:hidden fixed bottom-25 pl-1 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg items-center justify-center active:scale-90 transition-transform"
+            >
+                <ListPlus size={30}/>
+            </button>
 
         </div>
 );
