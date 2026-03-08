@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import {prisma} from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getProfile() {
@@ -143,6 +143,7 @@ export async function getDailyRecap() {
     totalTasks,
     pointsEarned: pointsToday?.points || 0,
     mood: moodToday?.emoji,
+    timeStudied: "0 hr 0 min",
     activities: tasksToday.map((t) => ({
       title: t.title,
       completed: t.completed,

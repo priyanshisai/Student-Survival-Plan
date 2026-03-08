@@ -1,6 +1,6 @@
 "use client";
 
-import {useState, useTransition} from "react";
+import {useState,useEffect, useTransition} from "react";
 import {useSession} from "next-auth/react";
 import {createMoodCheckIn, getTodaysMood} from "@/lib/actions/mood";
 import {getTodayLeaderboard, getUserStats} from "@/lib/actions/leaderboard";
@@ -34,7 +34,6 @@ const [userStats, setUserStats] = useState<{
 const [todoStats, setTodoStats] = useState<{ completed: number; total: number }>({completed: 0, total: 0});
 const [isPending, startTransition] = useTransition();
 
-
 const loadData = async () => {
     try {
         const [todaysMood, leaderboardData, stats, todos] = await Promise.all([
@@ -56,6 +55,11 @@ const loadData = async () => {
         console.error("Failed to load data:", error);
     }
 };
+
+    useEffect(()=>{
+        loadData();
+    },[]);
+
 
 const handleMoodSubmit = async () => {
     if (!selectedMood || alreadyCheckedIn) return;

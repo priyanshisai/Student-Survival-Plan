@@ -1,34 +1,25 @@
 "use client";
 
-import {useState} from "react";
+import {useState, useEffect, useTransition,} from "react";
 import {useSession} from "next-auth/react";
+import {getMoodHistory} from "@/lib/actions/mood";
+import {getProfileStats,getDailyRecap,getProfile,} from "@/lib/actions/profile";
+import {updateUserBio} from "@/lib/actions/user";
 import Grainient from "@/components/active/Grainient";
 import LiveDate from "@/components/LiveDate";
-import {Camera, UserPen, ChartColumnDecreasing, CalendarDays, NotebookPen,CircleSmall } from "lucide-react";
+import {Camera, UserPen, ChartColumnDecreasing, CalendarDays, NotebookPen, Check, } from "lucide-react";
 import {moods} from "@/constants/moods";
-
+import {getUserStats} from "@/lib/actions/leaderboard";
+import {getTodoStats} from "@/lib/actions/todos";
 
 interface DayRecap {
     tasksCompleted: number;
-    totalTasks: number;
+    totalTask: number;
     pointsEarned: number;
     timeStudied: string;
+    mood?: string;
+    activities: any[];
 }
-
-// Mock data
-const moodHistory = [
-    { date: "2024-02-10", label: "Great", note: "Aced the Next.js quiz!" },
-    { date: "2024-02-09", label: "Good" },
-    { date: "2024-02-08", label: "Stressed", note: "Database migration issues" },
-    { date: "2024-02-07", label: "Tired" },
-];
-
-const todayRecap: DayRecap = {
-    tasksCompleted: 5,
-    totalTasks: 8,
-    pointsEarned: 75,
-    timeStudied: "4h 30m",
-};
 
 const interests = ["Web Development", "Machine Learning", "Photography", "Gaming", "Music"];
 
@@ -38,10 +29,69 @@ const personalBlogs = [
 ];
 
 export default function ProfilePage() {
+
+    const [moodHistory, setMoodHistory] = useState<any>([]);
+    const [todayRecap, setTodayRecap] = useState<DayRecap | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [todostats, setTodoStats] = useState<{ completed: number; total: number }>({completed: 0, total: 0});
+
+    const [userStats, setUserStats] = useState<{
+        totalPoints: number;
+        todayPoints: number;
+        tasksCompleted: number;
+        streak: number;
+        badges: number;
+    } | null>(null);
+
     const {data: session} = useSession();
     const [activeTab, setActiveTab] = useState<"about" | "mood" | "recap" | "blogs">("about");
     const [isEditing, setIsEditing] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const [bio, setBio] = useState("Passionate about technology and learning new things. Love to help fellow students!");
+
+
+    // Trigger the fetch when page opens
+    useEffect(()=>{
+        const syncData = async() => {
+            try {
+                const [stats, todostats, profile, history, recap] = await Promise.all([
+                    getUserStats(),
+                    getTodoStats(),
+                    getProfile(),
+                    getMoodHistory(),
+                    getDailyRecap()
+                ]);
+                setUserStats(stats);
+                setTodoStats(todostats);
+                setMoodHistory(history || []);
+                setTodayRecap(recap);
+
+                if (profile?.bio) {
+                    setBio(profile.bio)
+                }
+            }
+            catch(error){
+                console.error("Failed to sync profile data: ", error);
+            }
+            finally{
+                setLoading(false);
+            }
+        };
+        syncData();
+    },[]);
+
+    const handleSaveBio = async () => {
+        startTransition(async () => {
+            try {
+                await updateUserBio(bio);
+                setIsEditing(false);
+            }
+            catch(error){
+                console.error("Failed to update bio: ", error);
+            }
+        });
+    };
+
 
     const productivityStreak = 12; // days
 
@@ -117,16 +167,22 @@ export default function ProfilePage() {
                     {/* Stats */}
                     <div className="flex gap-6 text-center">
                         <div>
-                            <p className="text-xl font-bold text-indigo-600">1,250</p>
+                            <p className="text-xl font-bold text-indigo-600">
+                                {userStats?.totalPoints || 0}
+                            </p>
                             <p className="text-sm text-gray-500">Points</p>
                         </div>
                         <div>
-                            <p className="text-xl font-bold text-green-600">48</p>
-                            <p className="text-sm text-gray-500">Tasks Done</p>
+                            <p className="text-xl font-bold text-indigo-600">
+                                {userStats?.tasksCompleted || 0}
+                            </p>
+                            <p className="text-sm text-gray-500">Tasks done</p>
                         </div>
                         <div>
-                            <p className="text-xl font-bold text-purple-600">5</p>
-                            <p className="text-sm text-gray-500">Badges</p>
+                            <p className="text-xl font-bold text-indigo-600">
+                                {userStats?.badges || 0}
+                            </p>
+                            <p className="text-sm text-gray-500"> Badges</p>
                         </div>
                     </div>
                 </div>
@@ -180,15 +236,19 @@ export default function ProfilePage() {
             {/* About Tab */}
             {activeTab === "about" && (
                 <div className="space-y-6">
+
                     {/* Bio */}
                     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-semibold text-gray-800">About Me</h2>
+
+                            {/*Edit & Save Bio */}
                             <button
-                                onClick={() => setIsEditing(!isEditing)}
+                                onClick={isEditing ? handleSaveBio : () => setIsEditing(true)}
+                                disabled={isPending}
                                 className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
                             >
-                                {isEditing ? "Save" : "Edit"}
+                                {isPending? "Saving..." : isEditing ? "Save" : "Edit"}
                             </button>
                         </div>
                         {isEditing ? (
@@ -214,7 +274,7 @@ export default function ProfilePage() {
                             {/* Top Week View (7-Day Grid) */}
                             <div className="grid grid-cols-7 gap-2 mb-6">
                                 {moodHistory.slice(0, 7).reverse().map((entry, index) => {
-                                    const moodData = moods.find(m => m.label === entry.label) || moods[4];
+                                    const moodData = moods.find(m => m.label === entry.emoji) || moods[4];
 
                                     return (
                                         <div
@@ -222,7 +282,7 @@ export default function ProfilePage() {
                                             className="p-2 text-center flex flex-row bg-gray-50 rounded-xl border border-gray-100 hover:bg-indigo-50 transition-all cursor-pointer group"
                                         >
                                             <p className="text-[10px] font-bold text-gray-400 uppercase">
-                                                {new Date(entry.date).toLocaleDateString("en-IN", { weekday: "short" })}
+                                                {new Date(entry.createdAt).toLocaleDateString("en-IN", { weekday: "short" })}
                                             </p>
                                             <div className="w-5 h-5 mx-auto group-hover:scale-110 transition-transform">
                                                 {moodData.visual}
@@ -236,7 +296,7 @@ export default function ProfilePage() {
                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Recent Activity</h3>
                             <div className="space-y-3">
                                 {moodHistory.map((entry, index) => {
-                                    const moodData = moods.find(m => m.label === entry.label) || moods[4];
+                                    const moodData = moods.find(m => m.label === entry.emoji) || moods[4];
                                     return (
                                         <div
                                             key={index}
@@ -247,7 +307,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div className="flex-1">
                                                 <p className="font-semibold text-gray-800 text-sm">
-                                                    {new Date(entry.date).toLocaleDateString("en-IN", {
+                                                    {new Date(entry.createdAt).toLocaleDateString("en-IN", {
                                                         weekday: "long",
                                                         month: "short",
                                                         day: "numeric",
@@ -270,35 +330,40 @@ export default function ProfilePage() {
             {/* Daily Recap Tab */}
             {activeTab === "recap" && (
 
-                <div className="space-y-6">
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white">
+                <div className="space-y-5">
+                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 text-white">
 
                         {/*Today's recap, date & time */}
-                        <div className="flex flex-row gap-2 items-center justify-between ">
-                        <h2 className="text-xl font-semibold mb-3">Today&apos;s Recap
-                        </h2>
+                        <div className="flex flex-row items-center justify-between ">
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-xl font-semibold mb-3"> Today&apos;s Recap </h2>
+                                { /* <div className="flex gap-2 ">
+                                    <span >{moods.find(m => m.label === todayRecap?.mood)?.visual}
+                                    </span>
+                                </div>
+                                */}
+                            </div>
                             <span className="flex items-center text-right">
                         <LiveDate />
                         </span>
                         </div>
-
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
                             {/*Tasks Done */}
                             <div className="bg-white/20 rounded-xl p-2 text-center">
                                 <p className="text-xl font-bold">
-                                    {todayRecap.tasksCompleted}/{todayRecap.totalTasks}
+                                    {todayRecap?.tasksCompleted || 0}/{todayRecap?.totalTasks || 0 }
                                 </p>
                                 <p className="text-sm opacity-80">Tasks Done</p>
                             </div>
                             {/*Today's points */}
                             <div className="bg-white/20 rounded-xl p-2 text-center">
-                                <p className="text-xl font-bold">+{todayRecap.pointsEarned}</p>
+                                <p className="text-xl font-bold">+{todayRecap?.pointsEarned || 0 }</p>
                                 <p className="text-sm opacity-80">Points</p>
                             </div>
                             {/*Study Time */}
                             <div className="bg-white/20 rounded-xl p-2 text-center">
-                                <p className="text-xl font-bold">{todayRecap.timeStudied}</p>
+                                <p className="text-xl font-bold">{todayRecap?.timeStudied || 0 }</p>
                                 <p className="text-sm opacity-80">Study Time</p>
                             </div>
                             {/*Productivity Streak */}
@@ -313,19 +378,19 @@ export default function ProfilePage() {
                     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                         <h3 className="font-semibold text-gray-800 mb-4">Activity Timeline</h3>
                         <div className="space-y-4">
-                            {[
-                                {time: "09:00 AM", action: "Completed morning check-in", emoji: "☀️"},
-                                {time: "10:30 AM", action: "Finished DSA assignment", emoji: "✅"},
-                                {time: "02:00 PM", action: "Joined ML Study Group", emoji: "👥"},
-                                {time: "04:00 PM", action: "Explored Library", emoji: "📚"},
-                                {time: "06:30 PM", action: "Helped 2 students", emoji: "🤝"},
-                            ].map((activity, index) => (
+                            {todayRecap?.activities && todayRecap?.activities.length > 0 ? (
+                                todayRecap?.activities.map((activity, index) => (
                                 <div key={index} className="flex items-center gap-4">
-                                    <span className="text-sm text-gray-400 w-20">{activity.time}</span>
-                                    <span className="text-xl">{activity.emoji}</span>
-                                    <span className="text-gray-700">{activity.action}</span>
+                                    <span className="text-sm text-gray-400 w-20">
+                                        {new Date(activity.time).toLocaleTimeString([],{ hour: '2-digit', minute: '2-digit'})}
+                                    </span>
+                                    <span className="text-xl">{activity.completed? <Check/> : <NotebookPen/>}</span>
+                                    <span className="text-gray-700">{activity.title}</span>
                                 </div>
-                            ))}
+                            ))
+                            ):(
+                                <p className="text-gray-500 text-sm italic">No activity recorded yet for today.</p>
+                            )}
                         </div>
                     </div>
                 </div>
