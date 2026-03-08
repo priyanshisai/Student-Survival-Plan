@@ -59,7 +59,7 @@ export default function CommunityPage() {
     setShowBanner(prev => !prev);
   };
   return (
-      <div className="relative overflow-x-hidden w-full min-h-screen z-0 bg-black/80 flex flex-col">
+      <div className="relative overflow-x-hidden overflow-y-auto w-full h-screen z-10 bg-black/80 flex-1 flex-col">
 
     <div className="min-h-screen w-full absolute inset-0 -z-2">
       <Grainient

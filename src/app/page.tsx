@@ -65,7 +65,7 @@ export default function Home() {
                         </Link>
                         <Link
                             href="/register"
-                            className= "text-sm flex-shrink-0 px-3 py-2 bg-white text-indigo-900 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
+                            className= "text-sm flex-shrink-0 px-3 py-2 bg-white text-indigo-900 rounded-lg font-semibold hover:bg-blue-400 transition-colors"
                         >
                             Get Started
                         </Link>
@@ -79,8 +79,8 @@ export default function Home() {
                 </nav>
 
                 {/* Headline and info */}
-                <div className="flex flex-col justify-center items-center text-center max-w-4xl mx-auto z-2">
-                    <h2 className="text-4xl md:text-7xl font-bold text-white mb-7">
+                <div className="flex flex-col justify-center items-center text-center max-w-3xl mx-auto z-2">
+                    <h2 className="text-4xl md:text-6xl font-bold text-white mb-7">
                         Your Ultimate
                         <span className="text-blue-400"> College Survival </span>
                         Companion

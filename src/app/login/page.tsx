@@ -48,7 +48,7 @@ export default function LoginPage() {
         <div className="min-h-screen w-full flex items-center contents-center justify-center  p-4">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md border border-white/20">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-white mb-2">
+                    <h1 className="text-2xl font-bold text-white mb-2">
                         Welcome Back!
                     </h1>
                     <p className="text-white/70">Sign in to your Student Survival Plan</p>
@@ -65,7 +65,7 @@ export default function LoginPage() {
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/70 mb-2"
                         >
                             College Email
                         </label>
@@ -76,14 +76,14 @@ export default function LoginPage() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="your-college-mail@iiitm.ac.in"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="text-sm w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
                         />
                     </div>
 
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-white/80 mb-2"
+                            className="block text-sm font-medium text-white/70 mb-2"
                         >
                             Password
                         </label>
@@ -94,14 +94,14 @@ export default function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="text-sm w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full py-3 px-4 bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-yellow-400/90 hover:bg-yellow-500/60 text-indigo-900 font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? "Signing in..." : "Sign In"}
                     </button>
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
                 <p className="text-center text-white/60 mt-3">
                     Don&apos;t have an account?{" "}
-                    <Link href="/register" className="text-yellow-400 hover:underline">
+                    <Link href="/register" className="text-yellow-400/60 hover:underline">
                         Register here
                     </Link>
                 </p>

@@ -219,13 +219,13 @@ return (
                                 return (
                                     <button
                                         key={option.id}
-                                        className={`${option.color} p-4 rounded-xl text-white text-left hover:opacity-90 transition-opacity `}
+                                        className={`${option.color} p-4 rounded-xl text-white md:text-left   hover:opacity-90 transition-opacity `}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Icon size={29}></Icon>
+                                            <Icon size={24}></Icon>
                                             <div className="hidden sm:block">
-                                                <h3 className="font-semibold ">{option.title}</h3>
-                                                <p className="text-sm opacity-90">{option.description}</p>
+                                                <h3 className="font-bold text-base">{option.title}</h3>
+                                                <p className="text-sm opacity-80">{option.description}</p>
                                             </div>
                                         </div>
                                     </button>
@@ -272,19 +272,19 @@ return (
 
                     {/* Quick Stats { Your Progress }*/}
                     <div className="bg-gray-700/70 rounded-2xl p-6 text-white">
-                        <h3 className="font-semibold mb-4">Your Progress</h3>
+                        <h3 className="font-bold mb-4 text-xl">Your Progress</h3>
                         <div className="space-y-3">
                             <div className="flex justify-between">
-                                <span className="opacity-90">Tasks Done Today</span>
-                                <span className="font-bold">{todoStats.completed}/{todoStats.total}</span>
+                                <span className="opacity-80">Tasks Done Today</span>
+                                <span className="font-semibold">{todoStats.completed}/{todoStats.total}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="opacity-90">Streak</span>
-                                <span className="font-bold"> {userStats?.streak || 0} days</span>
+                                <span className="opacity-80">Streak</span>
+                                <span className="font-semibold"> {userStats?.streak || 0} days</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="opacity-90">Points Earned</span>
-                                <span className="font-bold">+{userStats?.todayPoints || 0} pts</span>
+                                <span className="opacity-80">Points Earned</span>
+                                <span className="font-semibold">+{userStats?.todayPoints || 0} pts</span>
                             </div>
                         </div>
                     </div>

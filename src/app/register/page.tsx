@@ -99,7 +99,7 @@ export default function RegisterPage() {
           <div className="  z-10 w-full max-w-md">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md border border-white/20">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-white mb-2">
+                    <h1 className="text-2xl font-bold text-white mb-2">
                         Join the Squad! 🚀
                     </h1>
                     <p className="text-white/70">Create your Student Survival account</p>
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                             onChange={handleChange}
                             placeholder="Your Name"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-blue-400 transition-colors"
                         />
                     </div>
 
@@ -147,7 +147,7 @@ export default function RegisterPage() {
                             onChange={handleChange}
                             placeholder="Your College mail@iiitm.ac.in"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-blue-400 transition-colors"
                         />
                     </div>
 
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                             onChange={handleChange}
                             placeholder="••••••••"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-blue-400 transition-colors"
                         />
                     </div>
 
@@ -185,14 +185,14 @@ export default function RegisterPage() {
                             onChange={handleChange}
                             placeholder="••••••••"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-yellow-400 transition-colors"
+                            className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-blue-400 transition-colors"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full py-3 px-4 bg-white hover:bg-yellow-500 duration-100 text-black font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-white hover:bg-blue-400/70 duration-100 text-black/80 font-semibold text-sm rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? "Creating account..." : "Create Account"}
                     </button>

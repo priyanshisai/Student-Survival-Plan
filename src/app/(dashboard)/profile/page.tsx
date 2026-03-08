@@ -331,7 +331,7 @@ export default function ProfilePage() {
             {activeTab === "recap" && (
 
                 <div className="space-y-5">
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 text-white">
+                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 opacity-90 rounded-2xl p-4 text-white">
 
                         {/*Today's recap, date & time */}
                         <div className="flex flex-row items-center justify-between ">
@@ -376,7 +376,7 @@ export default function ProfilePage() {
 
                     {/* Activity Timeline */}
                     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 className="font-semibold text-gray-800 mb-4">Activity Timeline</h3>
+                        <h3 className="font-semibold text-gray-800 mb-4 text-xl">Activity Timeline</h3>
                         <div className="space-y-4">
                             {todayRecap?.activities && todayRecap?.activities.length > 0 ? (
                                 todayRecap?.activities.map((activity, index) => (

@@ -51,6 +51,26 @@ export async function getTodos(category?: TodoCategory) {
   return todos;
 }
 
+export async function getActiveTodos() {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  // Define the start of today in local time
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return await prisma.todoItem.findMany({
+    where: {
+      userId: session.user.id,
+      OR: [
+        { completed: false },
+        { updatedAt: { gte: today } }
+      ]
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+}
+
 export async function toggleTodo(todoId: string) {
   const session = await auth();
 
@@ -129,6 +149,7 @@ export async function getTodoStats() {
       },
     }),
   ]);
+
 
   return { completed, total: completed + total };
 }

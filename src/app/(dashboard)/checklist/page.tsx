@@ -4,6 +4,7 @@ import {useState, useEffect, useTransition} from "react";
 import {createTodo, getTodos, toggleTodo as toggleTodoAction, deleteTodo as deleteTodoAction, type TodoCategory} from "@/lib/actions/todos";
 import {X, ListPlus, Library, BellRing, Goal, Pill, Trash2} from "lucide-react";
 import Grainient from "@/components/active/Grainient";
+import {getActiveTodos} from "@/lib/actions/todos";
 
 type Category = TodoCategory;
 
@@ -73,7 +74,18 @@ export default function ChecklistPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        loadTodos();
+        const loadChecklist = async () => {
+            setIsLoading(true);
+            try {
+                const data = await getActiveTodos();
+                setTodos(data as TodoItem[]);
+            } catch (error) {
+                console.error("Failed to load checklist: ",error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadChecklist();
     }, []);
 
     const loadTodos = async () => {
@@ -177,14 +189,14 @@ export default function ChecklistPage() {
             </div>
 
             {/* Floating section (main) */}
-            <div className="md:m-10 m-3 relative z-10 md:p-10 p-4
+            <div className="md:m-10 m-3 relative z-10  p-4
             border-1 border-gray-400 rounded-3xl bg-gray-700/30
             animate-float mb-20 ">
 
-                    <div className="flex flex-col md:flex-row p-3 w-full md:mt-20 mt-6 gap-8 ">
+                    <div className="flex flex-col md:flex-row p-3 w-full md:mt-20 mt-6 gap-8 items-start">
 
                         {/* Left Section */}
-                        <div className="flex flex-col flex-1">
+                        <div className="flex flex-col w-full shrink-0 md:w-[49%]">
 
                             {/* Header */}
                             <div className="mb-8">
@@ -242,10 +254,10 @@ export default function ChecklistPage() {
                         </div>
 
                         {/* Right Section */}
-                        <div className=" flex flex-col flex-1">
+                        <div className=" flex flex-col w-full">
 
 
-                            <div className="flex flex-row justify-between w-full gap-2 mb-6">
+                            <div className="flex flex-row justify-between w-full gap-1 mb-6">
 
                                 {/* Filter Tabs */}
                                 <button
@@ -266,7 +278,7 @@ export default function ChecklistPage() {
                                         <button
                                             key={key}
                                             onClick={() => setFilterCategory(key as Category)}
-                                            className={`flex flex-row gap-2 px-4 py-2 rounded-lg font-xs justify-between w-full items-center text-center transition-colors ${
+                                            className={`flex flex-row gap-2 px-4 py-2 rounded-lg font-xs justify-center w-full items-center text-center transition-colors ${
                                                 filterCategory === key
                                                     ? "bg-indigo-600 text-white"
                                                     : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
