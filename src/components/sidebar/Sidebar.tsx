@@ -16,8 +16,8 @@ export default function Sidebar() {
 
         <aside
             className={`${
-                isCollapsed ? "min-w-10" : "w-[14%]"
-            } hidden lg:flex bg-black/87 min-h-screen p-4 flex flex-col transition-all duration-300`}
+                isCollapsed ? "w-20" : "w-48"
+            } hidden lg:flex bg-black/87 min-h-screen p-4 flex flex-col transition-all duration-300 `}
         >
 
             {/* Header */}
@@ -92,7 +92,7 @@ export default function Sidebar() {
                 )}
 
                 {/* Log Out */}
-                <div className="bg-gray-200 rounded-lg w-2/3 justify-center items-center w-full">
+                <div className="bg-gray-200 rounded-lg justify-center items-center w-full">
                 <button
                     onClick={() => signOut({callbackUrl: "/login"})}
                     className={`flex items-center gap-3 px-2 py-2 rounded-xl text-red-500 text-lg hover:bg-red-500/20 justify-center items-center transition-all w-full ${
