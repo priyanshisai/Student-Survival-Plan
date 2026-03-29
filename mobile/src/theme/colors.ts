@@ -1,0 +1,18 @@
+export const colors = {
+  background: "#06080d",
+  surface: "rgba(96, 109, 128, 0.18)",
+  surfaceStrong: "rgba(111, 125, 150, 0.28)",
+  surfaceSoft: "rgba(201, 217, 237, 0.12)",
+  card: "rgba(12, 18, 28, 0.68)",
+  cardMuted: "rgba(126, 152, 184, 0.14)",
+  text: "#f3f7fb",
+  textMuted: "#a7b7cb",
+  textDark: "#eef4fa",
+  border: "rgba(202, 221, 255, 0.16)",
+  accent: "#38bdf8",
+  accentSoft: "rgba(56, 189, 248, 0.18)",
+  accentStrong: "#14b8a6",
+  success: "#22c55e",
+  danger: "#fb7185",
+  warning: "#f59e0b",
+};

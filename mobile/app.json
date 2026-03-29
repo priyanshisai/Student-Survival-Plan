@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Student Survival Plan",
+    "slug": "student-survival-plan-mobile",
+    "scheme": "studentsurvivalplan",
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

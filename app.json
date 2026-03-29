@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "Student Survival Plan",
+    "slug": "student-survival-plan",
+    "scheme": "studentsurvivalplan",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light"
+  }
+}
