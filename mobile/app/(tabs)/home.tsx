@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Animated, Pressable, StyleSheet, Text, useWindowDimensions, View, } from "react-native";
 import { router } from "expo-router";
 
+import { AnimatedEmoji } from '@/components/AnimatedEmoji';
 import { AppCard } from "@/components/AppCard";
 import { AppScreen } from "@/components/AppScreen";
 import { Field } from "@/components/Field";
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { colors } from "@/theme/colors";
 import { moods } from "@/constants/moods";
 import { helpOptions } from "@/constants/help-options";
 import { createMoodCheckIn, getTodaysMood } from "@/features/mood/services/mood";
 import { getTodayLeaderboard, getUserStats } from "@/features/leaderboard/services/leaderboard";
 import { getProfile } from "@/features/profile/services/profile";
 import { getTodoStats } from "@/features/todos/services/todos";
+import GrainBackground from '@/components/GrainBackground';
+import BlinkingCursor from '@/components/BlinkingCursor';
+import { useTypewriter } from '@/hooks/useTypewriter';
 
 type LeaderboardEntry = {
   rank: number;
@@ -39,12 +42,39 @@ const moodDetails: Record<string, string> = {
   IDK: "Fair. Start with the easiest task and let the day unfold.",
 };
 
-const helpEmojis: Record<(typeof helpOptions)[number]["id"], string> = {
+const helpEmojis: Record<string, string> = {
   item: "🎒",
   wtf: "🌀",
   prof: "🧑‍🏫",
   advice: "☕",
 };
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good Morning";
+  if (hour < 17) return "Good Afternoon";
+  return "Good Evening";
+};
+
+function useTypewriter(text: string, speed = 70) {
+  const [displayed, setDisplayed] = useState('');
+
+  useEffect(() => {
+    setDisplayed('');
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return displayed;
+}
 
 export default function HomeScreen() {
   const { width } = useWindowDimensions();
@@ -59,10 +89,25 @@ export default function HomeScreen() {
   const [todoStats, setTodoStats] = useState({ completed: 0, total: 0 });
   const [userName, setUserName] = useState("Student");
 
-  const cardWidth = Math.min(116, width * 0.26);
-  const gap = 12;
+  const cardWidth = Math.min(100, width * 0.22);
+  const gap = 10;
   const snapInterval = cardWidth + gap;
   const sidePadding = Math.max(16, (width - cardWidth) / 2);
+
+  const fullGreeting = `${getGreeting()}, ${userName}! Have a good day!!`;
+
+  const hour = new Date().getHours();
+  const timeGreeting =
+      hour < 12 ? 'Good Morning' :
+          hour < 17 ? 'Good Afternoon' : 'Good Evening';
+
+  const texts = [
+    `${timeGreeting}, ${userName}! Have a good day!!`,
+    'Welcome back! Ready to learn?',
+    'Let\'s build something amazing!',
+  ];
+
+  const displayed = useTypewriter(texts, 80, 40, 2000, true);
 
   async function loadData() {
     try {
@@ -91,10 +136,7 @@ export default function HomeScreen() {
   }, []);
 
   async function handleMoodSubmit() {
-    if (!selectedMood || alreadyCheckedIn || submitting) {
-      return;
-    }
-
+    if (!selectedMood || alreadyCheckedIn || submitting) return;
     try {
       setSubmitting(true);
       setError(null);
@@ -104,303 +146,394 @@ export default function HomeScreen() {
     } catch (submitError) {
       console.error("Mood submit error:", submitError);
       setError(submitError instanceof Error ? submitError.message : "Failed to check in");
-    }finally {
+    } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <AppScreen title={`Hi, ${userName}`} subtitle="A softer student dashboard with daily momentum, help, and people.">
-      {error ? (
+      <AppScreen title={`Good morning, ${userName} 👋`} subtitle="Here's your daily snapshot.">
+        {error ? (
+            <AppCard>
+              <Text style={styles.errorText}>{error}</Text>
+            </AppCard>
+        ) : null}
+
+        <View style={styles.greetingCard}>
+          <GrainBackground />
+          <View style={styles.greetingRow}>
+            <Text style={styles.greetingText}>{displayed}</Text>
+            <BlinkingCursor color="#fff" />
+          </View>
+        </View>
+
+        {/* Your Progress */}
+        <View style={styles.glanceRow}>
+          <AppCard style={styles.glanceCard}>
+            <Text style={styles.statValue}>{userStats?.todayPoints ?? 0}</Text>
+            <Text style={styles.statLabel}>Points today</Text>
+          </AppCard>
+          <AppCard style={styles.glanceCard}>
+            <Text style={styles.statValue}>{todoStats.completed}/{todoStats.total}</Text>
+            <Text style={styles.statLabel}>Tasks done</Text>
+          </AppCard>
+          <AppCard style={styles.glanceCard}>
+            <Text style={styles.statValue}>{userStats?.streak ?? 0}</Text>
+            <Text style={styles.statLabel}>Day streak</Text>
+          </AppCard>
+        </View>
+
+        {/* Mood check-in */}
         <AppCard>
-          <Text style={styles.errorText}>{error}</Text>
-        </AppCard>
-      ) : null}
-
-      <AppCard>
-        <View style={styles.cardHeader}>
-          <View>
-            <Text style={styles.eyebrow}>Mood check-in</Text>
-            <Text style={styles.cardTitle}>How are you feeling today?</Text>
-          </View>
-          <View style={styles.statusPill}>
-            <Text style={styles.statusText}>{alreadyCheckedIn ? "Saved" : "Open"}</Text>
-          </View>
-        </View>
-
-        <Animated.ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.moodRail, { paddingHorizontal: sidePadding }]}
-          snapToInterval={snapInterval}
-          snapToAlignment="center"
-          decelerationRate="fast"
-          disableIntervalMomentum
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-            useNativeDriver: true,
-          })}
-          scrollEventThrottle={16}
-        >
-          {moods.map((mood, index) => {
-            const inputRange = [(index - 1) * snapInterval, index * snapInterval, (index + 1) * snapInterval];
-            const scale = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.8, 1.2, 0.8],
-              extrapolate: "clamp",
-            });
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.55, 1, 0.55],
-              extrapolate: "clamp",
-            });
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [10, -6, 10],
-              extrapolate: "clamp",
-            });
-            const active = selectedMood === mood.label;
-
-            return (
-              <Pressable key={mood.label} onPress={() => setSelectedMood(mood.label)}>
-                <Animated.View
-                  style={[
-                    styles.moodButton,
-                    active && styles.moodButtonActive,
-                    { width: cardWidth, opacity, transform: [{ scale }, { translateY }] },
-                  ]}
-                >
-                  <Text style={styles.moodEmoji}>{mood.emoji}</Text>
-                  <Text style={[styles.moodLabel, active && styles.moodLabelActive]}>{mood.label}</Text>
-                </Animated.View>
-              </Pressable>
-            );
-          })}
-        </Animated.ScrollView>
-
-        <View style={styles.moodNoteCard}>
-          <Text style={styles.moodNoteTitle}>{selectedMood ?? "Pick a mood"}</Text>
-          <Text style={styles.moodNoteBody}>
-            {selectedMood ? moodDetails[selectedMood] : "Scroll the emoji rail and keep the center card selected."}
-          </Text>
-        </View>
-
-        <Field
-          label="Add a note"
-          multiline
-          onChangeText={setMoodNote}
-          placeholder="What is driving today’s mood?"
-          value={moodNote}
-        />
-        <PrimaryButton
-          disabled={!selectedMood || alreadyCheckedIn || submitting}
-          label={alreadyCheckedIn ? "Already checked in" : submitting ? "Checking in..." : "Check in"}
-          onPress={handleMoodSubmit}
-        />
-      </AppCard>
-
-      <View style={styles.glanceRow}>
-        <AppCard style={styles.glanceCard}>
-          <Text style={styles.statValue}>{userStats?.todayPoints ?? 0}</Text>
-          <Text style={styles.statLabel}>Points today</Text>
-        </AppCard>
-        <AppCard style={styles.glanceCard}>
-          <Text style={styles.statValue}>
-            {todoStats.completed}/{todoStats.total}
-          </Text>
-          <Text style={styles.statLabel}>Tasks done</Text>
-        </AppCard>
-        <AppCard style={styles.glanceCard}>
-          <Text style={styles.statValue}>{userStats?.streak ?? 0}</Text>
-          <Text style={styles.statLabel}>Day streak</Text>
-        </AppCard>
-      </View>
-
-      <AppCard>
-        <Text style={styles.cardTitle}>Need help?</Text>
-        <View style={styles.helpGrid}>
-          {helpOptions.map((option) => (
-            <Pressable
-              key={option.id}
-              onPress={() => router.push({ pathname: "/help/request", params: { type: option.id } })}
-              style={styles.helpCard}
-            >
-              <Text style={styles.helpEmoji}>{helpEmojis[option.id]}</Text>
-              <Text style={styles.helpTitle}>{option.title}</Text>
-              <Text style={styles.helpDescription}>{option.description}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </AppCard>
-
-      <AppCard>
-        <Text style={styles.cardTitle}>Most productive today</Text>
-        {leaderboard.length === 0 ? (
-          <Text style={styles.emptyText}>No activity yet today.</Text>
-        ) : (
-          leaderboard.map((entry) => (
-            <View key={entry.userId} style={styles.leaderboardRow}>
-              <Text style={styles.rankText}>{entry.rank <= 3 ? ["🥇", "🥈", "🥉"][entry.rank - 1] : `#${entry.rank}`}</Text>
-              <View style={styles.leaderboardMeta}>
-                <Text style={styles.leaderboardName}>{entry.name}</Text>
-                <Text style={styles.leaderboardPoints}>{entry.points} points</Text>
-              </View>
+          <View style={styles.cardHeader}>
+            <View>
+              <Text style={styles.eyebrow}>Daily check-in</Text>
+              <Text style={styles.cardTitle}>How are you feeling?</Text>
             </View>
-          ))
-        )}
-      </AppCard>
-    </AppScreen>
+            <View style={[styles.statusPill, alreadyCheckedIn && styles.statusPillDone]}>
+              <Text style={[styles.statusText, alreadyCheckedIn && styles.statusTextDone]}>
+                {alreadyCheckedIn ? "✓ Done" : "Open"}
+              </Text>
+            </View>
+          </View>
+
+          <Animated.ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[styles.moodRail, { paddingHorizontal: sidePadding }]}
+              snapToInterval={snapInterval}
+              snapToAlignment="center"
+              decelerationRate="fast"
+              disableIntervalMomentum
+              onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                  { useNativeDriver: true }
+              )}
+              scrollEventThrottle={16}
+          >
+            {moods.map((mood, index) => {
+              const inputRange = [
+                (index - 1) * snapInterval,
+                index * snapInterval,
+                (index + 1) * snapInterval,
+              ];
+              const scale = scrollX.interpolate({ inputRange, outputRange: [0.82, 1.15, 0.82], extrapolate: "clamp" });
+              const opacity = scrollX.interpolate({ inputRange, outputRange: [0.5, 1, 0.5], extrapolate: "clamp" });
+              const translateY = scrollX.interpolate({ inputRange, outputRange: [8, -4, 8], extrapolate: "clamp" });
+              const active = selectedMood === mood.label;
+
+              return (
+                  <Pressable key={mood.label} onPress={() => setSelectedMood(mood.label)}>
+                    <Animated.View
+                        style={[
+                          styles.moodButton,
+                          active && styles.moodButtonActive,
+                          { width: cardWidth, opacity, transform: [{ scale }, { translateY }] },
+                        ]}
+                    >
+                      <AnimatedEmoji
+                          uri={mood.lottie}
+                          size={40}
+                          loop={true}
+                          autoPlay={active}
+                          fallback={mood.emoji}
+                      />
+                      <Text style={[styles.moodLabel, active && styles.moodLabelActive]}>
+                        {mood.label}
+                      </Text>
+                    </Animated.View>
+                  </Pressable>
+              );
+            })}
+          </Animated.ScrollView>
+
+          {selectedMood ? (
+              <View style={styles.moodNoteCard}>
+                <Text style={styles.moodNoteTitle}>{selectedMood}</Text>
+                <Text style={styles.moodNoteBody}>{moodDetails[selectedMood]}</Text>
+              </View>
+          ) : null}
+
+          <Field
+              label="Add a note"
+              multiline
+              onChangeText={setMoodNote}
+              placeholder="What's driving today's mood?"
+              value={moodNote}
+          />
+          <PrimaryButton
+              disabled={!selectedMood || alreadyCheckedIn || submitting}
+              label={alreadyCheckedIn ? "Already checked in" : submitting ? "Checking in..." : "Check In"}
+              onPress={handleMoodSubmit}
+          />
+        </AppCard>
+
+        {/* ✅ Need Help */}
+        <AppCard style={{ gap: 0 }} >
+          <Text style={styles.cardTitle}>Need Help?</Text>
+          <View style={styles.helpGrid}>
+            {helpOptions.map((option) => (
+                <Pressable
+                    key={option.id}
+                    onPress={() => router.push({ pathname: "/help/request", params: { type: option.id } })}
+                    style={styles.helpCard}
+                >
+                  <View style={styles.helpIconCircle}>
+                    <Text style={styles.helpEmoji}>{option.emoji}</Text>
+                  </View>
+                  <Text style={styles.helpTitle}>{option.title}</Text>
+                  <Text style={styles.helpDescription}>{option.description}</Text>
+                </Pressable>
+            ))}
+          </View>
+        </AppCard>
+
+        {/* Leaderboard */}
+        <AppCard>
+          <Text style={styles.cardTitle}>Most Productive Today</Text>
+          {leaderboard.length === 0 ? (
+              <Text style={styles.emptyText}>No activity yet today. Be the first!</Text>
+          ) : (
+              leaderboard.map((entry) => (
+                  <View key={entry.userId} style={styles.leaderboardRow}>
+                    <Text style={styles.rankText}>
+                      {entry.rank <= 3 ? ["🥇", "🥈", "🥉"][entry.rank - 1] : `#${entry.rank}`}
+                    </Text>
+                    <View style={styles.leaderboardMeta}>
+                      <Text style={styles.leaderboardName}>{entry.name}</Text>
+                      <Text style={styles.leaderboardPoints}>{entry.points} points</Text>
+                    </View>
+                  </View>
+              ))
+          )}
+        </AppCard>
+      </AppScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  errorText: {
-    color: colors.danger,
-    fontWeight: "600",
+
+  greetingCard: {
+    margin: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(156,163,175,0.4)',
+    borderRadius: 24,
+    backgroundColor: 'rgba(55,65,81,0.3)',
+    overflow: 'hidden',
+    minHeight: 80,
   },
+  greetingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  greetingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  header: {
+    marginTop: 20,
+    marginBottom: 32,
+    minHeight: 60,
+  },
+
+  errorText: {
+    color: "#ef4444",
+    fontWeight: "600",
+    fontSize: 13,
+  },
+
+  // Glance row
+  glanceRow: {
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor: 'rgba(55, 65, 81, 0.7)'
+  },
+  glanceCard: {
+    flex: 1,
+    alignItems: "center",
+  },
+  statValue: {
+    color: "#7c3aed",
+    fontSize: 26,
+    fontWeight: "800",
+  },
+  statLabel: {
+    color: "#64748b",
+    fontSize: 11,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+
+  // Card header
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 12,
   },
   eyebrow: {
-    color: colors.accent,
-    fontSize: 12,
+    color: "#7c3aed",
+    fontSize: 11,
     fontWeight: "800",
-    letterSpacing: 1,
+    letterSpacing: 1.2,
     textTransform: "uppercase",
+    marginBottom: 2,
   },
   cardTitle: {
-    color: colors.textDark,
-    fontSize: 20,
+    color: "#1e1b4b",
+    fontSize: 18,
     fontWeight: "800",
   },
   statusPill: {
     borderRadius: 999,
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: colors.cardMuted,
+    paddingVertical: 6,
+    backgroundColor: "#f1f5f9",
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "#e2e8f0",
+  },
+  statusPillDone: {
+    backgroundColor: "#ede9fe",
+    borderColor: "#c4b5fd",
   },
   statusText: {
-    color: colors.textMuted,
+    color: "#94a3b8",
     fontSize: 12,
     fontWeight: "700",
   },
+  statusTextDone: {
+    color: "#7c3aed",
+  },
+
+  // Mood rail
   moodRail: {
-    gap: 12,
+    gap: 10,
     alignItems: "center",
+    paddingVertical: 8,
   },
   moodButton: {
-    minHeight: 126,
-    borderRadius: 28,
-    backgroundColor: "rgba(255,255,255,0.09)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.09)",
+    minHeight: 110,
+    borderRadius: 20,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1.5,
+    borderColor: "#e2e8f0",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 12,
-    gap: 10,
+    paddingHorizontal: 8,
+    gap: 8,
   },
   moodButtonActive: {
-    backgroundColor: "rgba(56, 189, 248, 0.18)",
-    borderColor: "rgba(95, 219, 255, 0.38)",
+    backgroundColor: "#ede9fe",
+    borderColor: "#7c3aed",
   },
   moodEmoji: {
-    fontSize: 34,
+    fontSize: 30,
   },
   moodLabel: {
-    color: colors.textMuted,
-    fontSize: 13,
+    color: "#94a3b8",
+    fontSize: 12,
     fontWeight: "700",
   },
   moodLabelActive: {
-    color: colors.text,
+    color: "#7c3aed",
   },
+
+  // Mood note
   moodNoteCard: {
-    borderRadius: 18,
-    backgroundColor: colors.cardMuted,
+    borderRadius: 14,
+    backgroundColor: "#f5f3ff",
     padding: 14,
     gap: 4,
+    borderWidth: 1,
+    borderColor: "#ede9fe",
   },
   moodNoteTitle: {
-    color: colors.text,
-    fontSize: 16,
+    color: "#4c1d95",
+    fontSize: 15,
     fontWeight: "700",
   },
   moodNoteBody: {
-    color: colors.textMuted,
+    color: "#6d28d9",
     lineHeight: 20,
-  },
-  glanceRow: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  glanceCard: {
-    flex: 1,
-  },
-  statValue: {
-    color: colors.text,
-    fontSize: 24,
-    fontWeight: "800",
-  },
-  statLabel: {
-    color: colors.textMuted,
     fontSize: 13,
   },
+
+  // Help
   helpGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
+    marginTop: 12,
   },
   helpCard: {
     width: "48%",
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 14,
-    backgroundColor: colors.cardMuted,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
     gap: 8,
   },
+  helpIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: "#ede9fe",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 4,
+  },
   helpEmoji: {
-    fontSize: 24,
+    fontSize: 22,
   },
   helpTitle: {
-    color: colors.text,
+    color: "#1e1b4b",
     fontWeight: "700",
+    fontSize: 13,
   },
   helpDescription: {
-    color: colors.textMuted,
-    fontSize: 13,
-    lineHeight: 18,
+    color: "#64748b",
+    fontSize: 12,
+    lineHeight: 17,
   },
+
+  // Leaderboard
   emptyText: {
-    color: colors.textMuted,
+    color: "#94a3b8",
+    fontSize: 13,
   },
   leaderboardRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    borderRadius: 18,
-    backgroundColor: colors.cardMuted,
+    borderRadius: 14,
+    backgroundColor: "#f8fafc",
     padding: 12,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
   rankText: {
-    width: 48,
-    color: colors.text,
+    width: 40,
+    color: "#1e1b4b",
     fontSize: 18,
     fontWeight: "800",
     textAlign: "center",
   },
   leaderboardMeta: {
     flex: 1,
-    gap: 4,
+    gap: 2,
   },
   leaderboardName: {
-    color: colors.text,
+    color: "#1e1b4b",
     fontWeight: "700",
+    fontSize: 14,
   },
   leaderboardPoints: {
-    color: colors.textMuted,
-    fontSize: 13,
+    color: "#7c3aed",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
+

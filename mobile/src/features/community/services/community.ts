@@ -56,7 +56,7 @@ export async function getStudyGroups(search?: string) {
           .from("study_group_members")
           .select("*", { count: "exact", head: true })
           .eq("study_group_id", group.id),
-        supabase.from("users").select("name").eq("id", group.created_by_id).maybeSingle(),
+        supabase.from("profiles").select("name").eq("id", group.created_by_id).maybeSingle(),
       ]);
 
       return {

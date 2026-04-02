@@ -30,7 +30,7 @@ export async function getHelpRequests(type?: HelpType, limit = 10) {
   const supabase = getSupabase();
   let query = supabase
     .from("help_requests")
-    .select("*, users(name, profile_pic), help_responses(*)")
+    .select("*,profiles(name, profile_pic), help_responses(*)")
     .eq("status", "open")
     .order("created_at", { ascending: false })
     .limit(limit);

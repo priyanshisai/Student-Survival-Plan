@@ -6,11 +6,11 @@ export async function getTodayLeaderboard(limit = 10) {
   const supabase = getSupabase();
 
   const { data, error } = await supabase
-    .from("leaderboard_entries")
-    .select("user_id, points, users(name, profile_pic)")
-    .gte("date", startOfTodayIso())
-    .order("points", { ascending: false })
-    .limit(limit);
+      .from("leaderboard_entries")
+      .select("user_id, points, profiles(name, profile_pic)")
+      .gte("date", startOfTodayIso())
+      .order("points", { ascending: false })
+      .limit(limit);
 
   if (error) {
     throw error;
@@ -19,8 +19,8 @@ export async function getTodayLeaderboard(limit = 10) {
   return (data ?? []).map((entry, index) => ({
     rank: index + 1,
     userId: entry.user_id,
-    name: entry.users?.[0]?.name ?? "Anonymous",
-    profilePic: entry.users?.[0]?.profile_pic ?? null,
+    name: (entry.profiles as any)?.name ?? "Anonymous",
+    profilePic: (entry.profiles as any)?.profile_pic ?? null,
     points: entry.points,
   }));
 }
@@ -39,19 +39,19 @@ export async function getAllTimeLeaderboard(limit = 10) {
   }
 
   const sorted = [...totals.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit);
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit);
 
   const users = await Promise.all(
-    sorted.map(async ([userId]) => {
-      const { data: user } = await supabase
-        .from("users")
-        .select("id, name, profile_pic")
-        .eq("id", userId)
-        .maybeSingle();
+      sorted.map(async ([userId]) => {
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("id, name, profile_pic")
+            .eq("id", userId)
+            .maybeSingle();
 
-      return user;
-    })
+        return profile;
+      })
   );
 
   return sorted.map(([userId, points], index) => {
@@ -73,11 +73,11 @@ export async function getMyRank() {
   const date = startOfTodayIso();
 
   const { data: myEntry, error } = await supabase
-    .from("leaderboard_entries")
-    .select("points")
-    .eq("user_id", user.id)
-    .eq("date", date)
-    .maybeSingle();
+      .from("leaderboard_entries")
+      .select("points")
+      .eq("user_id", user.id)
+      .eq("date", date)
+      .maybeSingle();
 
   if (error) {
     throw error;
@@ -88,10 +88,10 @@ export async function getMyRank() {
   }
 
   const { count, error: countError } = await supabase
-    .from("leaderboard_entries")
-    .select("*", { count: "exact", head: true })
-    .gte("date", date)
-    .gt("points", myEntry.points);
+      .from("leaderboard_entries")
+      .select("*", { count: "exact", head: true })
+      .gte("date", date)
+      .gt("points", myEntry.points);
 
   if (countError) {
     throw countError;
@@ -116,22 +116,22 @@ export async function getUserStats() {
   ] = await Promise.all([
     supabase.from("leaderboard_entries").select("points").eq("user_id", user.id),
     supabase
-      .from("leaderboard_entries")
-      .select("points")
-      .eq("user_id", user.id)
-      .eq("date", date)
-      .maybeSingle(),
+        .from("leaderboard_entries")
+        .select("points")
+        .eq("user_id", user.id)
+        .eq("date", date)
+        .maybeSingle(),
     supabase
-      .from("todo_items")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("completed", true)
-      .gte("updated_at", date),
+        .from("todo_items")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("completed", true)
+        .gte("updated_at", date),
     supabase
-      .from("leaderboard_entries")
-      .select("date")
-      .eq("user_id", user.id)
-      .order("date", { ascending: false }),
+        .from("leaderboard_entries")
+        .select("date")
+        .eq("user_id", user.id)
+        .order("date", { ascending: false }),
   ]);
 
   if (totalPointsError || todayPointsError || tasksError || streakError) {

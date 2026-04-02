@@ -1,18 +1,31 @@
 export const colors = {
-  background: "#06080d",
-  surface: "rgba(96, 109, 128, 0.18)",
-  surfaceStrong: "rgba(111, 125, 150, 0.28)",
-  surfaceSoft: "rgba(201, 217, 237, 0.12)",
-  card: "rgba(12, 18, 28, 0.68)",
-  cardMuted: "rgba(126, 152, 184, 0.14)",
-  text: "#f3f7fb",
-  textMuted: "#a7b7cb",
-  textDark: "#eef4fa",
-  border: "rgba(202, 221, 255, 0.16)",
-  accent: "#38bdf8",
-  accentSoft: "rgba(56, 189, 248, 0.18)",
-  accentStrong: "#14b8a6",
-  success: "#22c55e",
-  danger: "#fb7185",
-  warning: "#f59e0b",
+  // Backgrounds
+  background: "#1a1a2e",
+  backgroundGradientStart: "#1a1a2e",
+  backgroundGradientEnd: "#16213e",
+
+  // Cards
+  card: "#ffffff",
+  cardMuted: "rgba(255,255,255,0.08)",
+  cardWhite: "#ffffff",
+
+  // Accent / Primary
+  accent: "#7c3aed",
+  accentLight: "#a78bfa",
+  accentGradientStart: "#7c3aed",
+  accentGradientEnd: "#4f46e5",
+
+  // Text
+  text: "#ffffff",
+  textDark: "#1e1b4b",
+  textMuted: "#94a3b8",
+  textOnCard: "#1e1b4b",
+  textOnCardMuted: "#64748b",
+
+  // Status
+  danger: "#f87171",
+  success: "#34d399",
+
+  // Border
+  border: "rgba(255,255,255,0.1)",
 };

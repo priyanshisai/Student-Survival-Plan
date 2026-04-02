@@ -552,7 +552,7 @@ export async function getPublicBlogs() {
 
   const { data, error } = await supabase
     .from("blog_posts")
-    .select("id, title, content, is_public, created_at, users(name)")
+    .select("id, title, content, is_public, created_at, profiles(name)")
     .eq("is_public", true)
     .order("created_at", { ascending: false });
 

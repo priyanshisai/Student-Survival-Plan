@@ -363,13 +363,12 @@ export default function App() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.screenContent}>
           <Text style={styles.title}>Student Survival Plan</Text>
-          <Text style={styles.subtitle}>React Native + Expo + Supabase.</Text>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
           {message ? <Text style={styles.successText}>{message}</Text> : null}
           <AppCard>
             <Text style={styles.sectionTitle}>{authMode === "login" ? "Sign in" : "Sign up"}</Text>
             {authMode === "signup" ? <AppField label="Name" value={name} onChangeText={setName} placeholder="Your name" /> : null}
-            <AppField label="Email" value={email} onChangeText={setEmail} placeholder="student@college.edu" />
+            <AppField label="Email" value={email} onChangeText={setEmail} placeholder="student@iiitm.ac.in" />
             <AppField label="Password" value={password} onChangeText={setPassword} placeholder="Password" />
             <AppButton label={loading ? "Working..." : authMode === "login" ? "Sign in" : "Create account"} onPress={handleAuth} />
             <AppButton

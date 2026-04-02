@@ -1,25 +1,18 @@
 {
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
-    "App.tsx",
-    "mobile/src/constants/**/*.ts",
-    "mobile/src/features/**/*.ts",
-    "mobile/src/lib/**/*.ts",
-    "mobile/src/theme/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "src",
-    ".next",
-    "prisma"
-  ],
-  "extends": "expo/tsconfig.base"
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
 }
